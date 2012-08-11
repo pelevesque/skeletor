@@ -115,7 +115,7 @@ end
 	@param   number   y1
 	@param   number   x2
 	@param   number   y2
-	@return  number   ditance
+	@return  number   distance
 --]]
 local function getCoordinatesDistance(x1, y1, x2, y2)
 	return math.sqrt(math.pow((x2 - x1), 2) + math.pow((y2 - y1), 2))
