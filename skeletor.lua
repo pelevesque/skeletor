@@ -314,15 +314,15 @@ function skeletor:newSkeleton(name, props)
 end
 
 --[[
-	Adds a bone to a skeleton
+	Creates a new bone
 
 	@param   string   name
 	@param   string   path
 	@param   table    properties
 	@return  void
 --]]
-function skeletor:addBone(path, props)
-	local function addBone(path, i, bone, props)
+function skeletor:newBone(path, props)
+	local function newBone(path, i, bone, props)
 		if #path == i then
 			bone[path[i]] = {
 				length = props.length or 0,
@@ -351,14 +351,28 @@ function skeletor:addBone(path, props)
 				childBones = {}
 			}
 		else
-			addBone(path, i + 1, bone[path[i]].childBones, props)
+			newBone(path, i + 1, bone[path[i]].childBones, props)
 		end
 	end
-	addBone(splitPath(path), 1, self.skeletons, props or {})
+	newBone(splitPath(path), 1, self.skeletons, props or {})
 end
 
 --[[
-	Edits a skeleton bone
+	Edits a skeleton
+
+	@param   string   name
+	@param   string   path
+	@param   table    properties
+	@return  void
+--]]
+function skeletor:editSkeleton(name, props)
+	for k,v in pairs(props) do
+		self.skeletons[name][k] = v
+	end
+end
+
+--[[
+	Edits a bone
 
 	@param   string   path
 	@param   table    properties
@@ -378,17 +392,30 @@ function skeletor:editBone(path, props)
 end
 
 --[[
-	Edits a skeleton
+	Deletes a skeleton
 
 	@param   string   name
-	@param   string   path
-	@param   table    properties
 	@return  void
 --]]
-function skeletor:editSkeleton(name, props)
-	for k,v in pairs(props) do
-		self.skeletons[name][k] = v
+function skeletor:deleteSkeleton(name)
+	self.skeletons[name] = nil
+end
+
+--[[
+	Deletes a bone
+
+	@param   string   path
+	@return  void
+--]]
+function skeletor:deleteBone(path)
+	local function deleteBone(path, i, bone)
+		if #path == i then
+			bone[path[i]] = nil
+		else
+			deleteBone(path, i + 1, bone[path[i]].childBones)
+		end
 	end
+	deleteBone(splitPath(path), 1, self.skeletons)
 end
 
 --[[
