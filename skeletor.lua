@@ -231,6 +231,10 @@ end
 --]]
 local defaultStyle = {
 	show = true,
+	boundariesShow = true,
+	boundariesStyle = "smooth",
+	boundariesWidth = 1,
+	boundariesColor = {255, 0, 0},
 	wireShow = true,
 	wireStyle = "smooth",
 	wireWidth = 1,
@@ -299,6 +303,10 @@ function skeletor:newSkeleton(name, props)
 		sy = props.sy or 1,
 		angle = props.angle or 0,
 		show = parseBool(props.show, self.style.show),
+		boundariesShow = parseBool(props.boundariesShow, self.style.boundariesShow),
+		boundariesStyle = props.boundariesStyle or self.style.boundariesStyle,
+		boundariesWidth = props.boundariesWidth or self.style.boundariesWidth,
+		boundariesColor = props.boundariesColor or self.style.boundariesColor,
 		wireShow = parseBool(props.wireShow, self.style.wireShow),
 		wireStyle = props.wireStyle or self.style.wireStyle,
 		wireWidth = props.wireWidth or self.style.wireWidth,
@@ -321,6 +329,7 @@ function skeletor:newSkeleton(name, props)
 		textureColor = props.textureColor or self.style.textureColor,
 		textureColorMode = props.textureColorMode or self.style.textureColorMode,
 		texturePixelEffect = props.texturePixelEffect or self.style.texturePixelEffect,
+		boundaries = {},
 		childBones = {}
 	}
 end
@@ -518,6 +527,13 @@ function skeletor:draw()
 				)
 				if texturePixelEffect then love.graphics.setPixelEffect() end
 			end
+			local bx1, by1, bx2, by2
+			if x1 < x2 then bx1, bx2 = x1, x2 else bx1, bx2 = x2, x1 end
+			if y1 < y2 then by1, by2 = y1, y2 else by1, by2 = y2, y1 end
+			if bx1 < skeleton.boundaries.x1 then skeleton.boundaries.x1 = bx1 end
+			if bx2 > skeleton.boundaries.x2 then skeleton.boundaries.x2 = bx2 end
+			if by1 < skeleton.boundaries.y1 then skeleton.boundaries.y1 = by1 end
+			if by2 > skeleton.boundaries.y2 then skeleton.boundaries.y2 = by2 end
 		end
 		for _,childBone in pairs(bone.childBones) do
 			drawBones(childBone, x2, y2, skeleton)
@@ -525,8 +541,20 @@ function skeletor:draw()
 	end
 	for _,skeleton in pairs(self.skeletons) do
 		if skeleton.show then
+			skeleton.boundaries = {x1 = 999999, y1 = 999999, x2 = -999999, y2 = -999999}
 			for _,childBone in pairs(skeleton.childBones) do
 				drawBones(childBone, skeleton.x, skeleton.y, skeleton)
+			end
+			if skeleton.boundariesShow then
+				love.graphics.setLine(skeleton.boundariesWidth, skeleton.boundariesStyle)
+				love.graphics.setColor(skeleton.boundariesColor)
+				love.graphics.rectangle(
+					"line",
+					skeleton.boundaries.x1,
+					skeleton.boundaries.y1,
+					skeleton.boundaries.x2 - skeleton.boundaries.x1,
+					skeleton.boundaries.y2 - skeleton.boundaries.y1
+				)
 			end
 		end
 	end
