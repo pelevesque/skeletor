@@ -246,7 +246,13 @@ local defaultStyle = {
 	shapeShape = skeletor:getEllipseVertices(0, 0, 1, .35, 0, 30),
 	shapeSx = 1,
 	shapeSy = 1,
-	shapeColor = {255, 255, 255}
+	shapeColor = {255, 255, 255},
+	textureShow = false,
+	textureImage = nil,
+	textureBlendMode = "alpha",
+	textureColor = {255, 255, 255},
+	textureColorMode = "replace",
+	texturePixelEffect = nil
 }
 
 --[[
@@ -309,6 +315,12 @@ function skeletor:newSkeleton(name, props)
 		shapeSx = props.shapeSx or self.style.shapeSx,
 		shapeSy = props.shapeSy or self.style.shapeSy,
 		shapeColor = props.shapeColor or self.style.shapeColor,
+		textureShow = parseBool(props.textureShow, self.style.textureShow),
+		textureImage = props.textureImage,
+		textureBlendMode = props.textureBlendMode or self.style.textureBlendMode,
+		textureColor = props.textureColor or self.style.textureColor,
+		textureColorMode = props.textureColorMode or self.style.textureColorMode,
+		texturePixelEffect = props.texturePixelEffect or self.style.texturePixelEffect,
 		childBones = {}
 	}
 end
@@ -348,6 +360,12 @@ function skeletor:newBone(path, props)
 				shapeSx = props.shapeSx,
 				shapeSy = props.shapeSy,
 				shapeColor = props.shapeColor,
+				textureShow = props.textureShow,
+				textureImage = props.textureImage,
+				textureBlendMode = props.textureBlendMode,
+				textureColor = props.textureColor,
+				textureColorMode = props.textureColorMode,
+				texturePixelEffect = props.texturePixelEffect,
 				childBones = {}
 			}
 		else
@@ -477,6 +495,28 @@ function skeletor:draw()
 				love.graphics.polygon(jointMode, jointShape)
 				transform(jointShape, 0, x2 - x1, y2 - y1, 1, 1)
 				love.graphics.polygon(jointMode, jointShape)
+			end
+			if parseBool(bone.textureShow, skeleton.textureShow) then
+				local textureImage = bone.textureImage or skeleton.textureImage
+				local textureBlendMode = bone.textureBlendMode or skeleton.textureBlendMode
+				local textureColor = bone.textureColor or skeleton.textureColor
+				local textureColorMode = bone.textureColorMode or skeleton.textureColorMode
+				local texturePixelEffect = bone.texturePixelEffect or skeleton.texturePixelEffect
+				love.graphics.setBlendMode(textureBlendMode)
+				love.graphics.setColorMode(textureColorMode)
+				if textureColorMode ~= "replace" then love.graphics.setColor(textureColor) end
+				if texturePixelEffect then love.graphics.setPixelEffect(texturePixelEffect) end
+				love.graphics.draw(
+					textureImage,
+					x1 + ((x2 - x1) / 2),
+					y1 + ((y2 - y1) / 2),
+					angle,
+					sx,
+					sy,
+					(textureImage:getWidth() / 2),
+					(textureImage:getHeight() / 2)
+				)
+				if texturePixelEffect then love.graphics.setPixelEffect() end
 			end
 		end
 		for _,childBone in pairs(bone.childBones) do
