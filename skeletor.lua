@@ -46,6 +46,24 @@ local function copyTable(t)
 end
 
 --[[
+	Copies a multi-dimension table
+
+	@param   table    table
+	@return  table    copied table
+--]]
+local function copyDeepTable(t)
+	local copy = {}
+	for k,v in pairs(t) do
+		if type(v) == "table" then
+			copy[k] = copyDeepTable(v)
+		else
+			copy[k] = v
+		end
+	end
+	return copy
+end
+
+--[[
 	Merges two single dimension tables
 
 	The values in t1 are overwritten with those in t2.
@@ -475,6 +493,19 @@ function skeletor:deleteBone(path)
 		end
 	end
 	deleteBone(splitPath(path), 1, self.skeletons)
+end
+
+--[[
+	Clones a skeleton
+
+	@param   string   name of the skeleton to clone from
+	@param   string   name of the new skeleton
+	@param   table    skeleton properties to edit
+	@return  void
+--]]
+function skeletor:cloneSkeleton(from, clone, props)
+	self.skeletons[clone] = copyDeepTable(self.skeletons[from])
+	self:editSkeleton(clone, props or {})
 end
 
 --[[
