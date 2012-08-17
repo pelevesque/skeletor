@@ -184,6 +184,17 @@ local function transform(v, angle, ox, oy, sx, sy)
 end
 
 --[[
+	Gets the midway between two numbers
+
+	@param   number   number 1
+	@param   number   number 2
+	@return  number   midway
+--]]
+local function getMidwayBetweenNumbers(n1, n2)
+	return n1 + ((n2 - n1) / 2)
+end
+
+--[[
 	Constant: One divided by PI
 
 	@usedby    normalizeScalingFromAngle()
@@ -493,8 +504,8 @@ function skeletor:draw()
 				transform(
 					shapeShape,
 					angle,
-					x1 + ((x2 - x1) / 2),
-					y1 + ((y2 - y1) / 2),
+					getMidwayBetweenNumbers(x1, x2),
+					getMidwayBetweenNumbers(y1, y2),
 					length * shapeSx,
 					length * shapeSy * normalizeScalingFromAngle(angle, sx, sy)
 				)
@@ -540,8 +551,8 @@ function skeletor:draw()
 				if texturePixelEffect then love.graphics.setPixelEffect(texturePixelEffect) end
 				love.graphics.draw(
 					textureImage,
-					x1 + ((x2 - x1) / 2),
-					y1 + ((y2 - y1) / 2),
+					getMidwayBetweenNumbers(x1, x2),
+					getMidwayBetweenNumbers(y1, y2),
 					angle,
 					sx,
 					sy,
