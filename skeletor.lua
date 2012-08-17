@@ -274,7 +274,7 @@ local defaultStyle = {
 	wireColor = {255, 255, 255},
 	jointShow = true,
 	jointMode = "fill",
-	jointShape = skeletor:getEllipseVertices(0, 0, 8, 8, 0, 15),
+	jointShape = skeletor:getEllipseVertices(0, 0, 8, 8, 0, 30),
 	jointRotatable = false,
 	jointScalable = true,
 	jointColor = {0, 123, 255},
@@ -381,8 +381,6 @@ function skeletor:newBone(path, props)
 		if #path == i then
 			bone[path[i]] = {
 				length = props.length or 0,
-				ox = props.ox or 0,
-				oy = props.oy or 0,
 				sx = props.sx or 1,
 				sy = props.sy or 1,
 				angle = props.angle or 0,
@@ -485,10 +483,9 @@ end
 	@return  void
 --]]
 function skeletor:draw()
-	local function drawBones(bone, x, y, skeleton)
+	local function drawBones(bone, x1, y1, skeleton)
 		local sx, sy = scale(bone.sx, bone.sy, skeleton.sx, skeleton.sy)
 		local angle = bone.angle + skeleton.angle
-		local x1, y1 = translate(x, y, bone.ox, bone.oy)
 		local x2, y2 = polarToCartesian(bone.length, angle)
 		x2, y2 = scale(x2, y2, sx, sy)
 		x2, y2 = translate(x2, y2, x1, y1)
@@ -528,11 +525,7 @@ function skeletor:draw()
 				local jointColor = bone.jointColor or skeleton.jointColor
 				local jointAngle, jointSx, jointSy
 				if jointRotatable then jointAngle = angle else jointAngle = 0 end
-				if jointScalable then
-					jointSx, jointSy = sx, sy
-				else
-					jointSx, jointSy = 1, 1
-				end
+				if jointScalable then jointSx, jointSy = sx, sy else jointSx, jointSy = 1, 1 end
 				love.graphics.setColor(jointColor)
 				transform(jointShape, jointAngle, x1, y1, jointSx, jointSy)
 				love.graphics.polygon(jointMode, jointShape)
