@@ -183,6 +183,27 @@ local function transform(v, angle, ox, oy, sx, sy)
 	end
 end
 
+--[[
+	Constant: One divided by PI
+
+	@usedby    normalizeScalingFromAngle()
+--]]
+local oneDividedByPI = 1 / math.pi
+
+--[[
+	Normalizes scaling from an angle
+
+	@param   number   angle in radians
+	@param   number   sx
+	@param   number   sy
+	@return  number   normalized scaling
+--]]
+local function normalizeScalingFromAngle(angle, sx, sy)
+	local factorY = math.abs((oneDividedByPI * (angle % math.pi)) - .5)
+	local factorX = .5 - factorY
+	return (math.abs(sx) * factorX) + (math.abs(sy) * factorY)
+end
+
 ----------------------------------------------------
 -- Module setup
 ----------------------------------------------------
@@ -231,6 +252,7 @@ end
 --]]
 local defaultStyle = {
 	show = true,
+	boundariesCalculate = false,
 	boundariesShow = true,
 	boundariesStyle = "smooth",
 	boundariesWidth = 1,
@@ -303,6 +325,7 @@ function skeletor:newSkeleton(name, props)
 		sy = props.sy or 1,
 		angle = props.angle or 0,
 		show = parseBool(props.show, self.style.show),
+		boundariesShow = parseBool(props.boundariesCalculate, self.style.boundariesCalculate),
 		boundariesShow = parseBool(props.boundariesShow, self.style.boundariesShow),
 		boundariesStyle = props.boundariesStyle or self.style.boundariesStyle,
 		boundariesWidth = props.boundariesWidth or self.style.boundariesWidth,
@@ -473,7 +496,7 @@ function skeletor:draw()
 					x1 + ((x2 - x1) / 2),
 					y1 + ((y2 - y1) / 2),
 					length * shapeSx,
-					length * shapeSy
+					length * shapeSy * normalizeScalingFromAngle(angle, sx, sy)
 				)
 				love.graphics.setColor(shapeColor)
 				love.graphics.polygon(shapeMode, shapeShape)
