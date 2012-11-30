@@ -509,36 +509,17 @@ function skeletor:cloneSkeleton(from, clone, props)
 	self:editSkeleton(clone, props or {})
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 --[[
 	Draws the skeletons
 
 	@return  void
+	@uses    scale(), polarToCartesian(), translate(), getCoordinatesDistance()
+	@uses    parseBool(), copyTable(), getAverage(), 
 --]]
 function skeletor:draw()
 
-
-
-
-
--- 1) -- Transformations ont the skeleton after all boundaries have been drawn.
+-- 1) -- Transformations on the skeleton after all boundaries have been drawn.
 -- 2) -- Have an offset for rotation.
-
 
 	local function drawBones(bone, x1, y1, skeleton)
 		local sx, sy = scale(bone.sx, bone.sy, skeleton.sx, skeleton.sy)
@@ -548,9 +529,8 @@ function skeletor:draw()
 		x2, y2 = translate(x2, y2, x1, y1)
 		angle = math.atan2(y2 - y1, x2 - x1)
 		local length = getCoordinatesDistance(x1, y1, x2, y2)
-		
-		
-		-- Always calculate boundaries
+
+		-- Always calculate boundaries?
 		local bx1, by1, bx2, by2
 		if x1 < x2 then bx1, bx2 = x1, x2 else bx1, bx2 = x2, x1 end
 		if y1 < y2 then by1, by2 = y1, y2 else by1, by2 = y2, y1 end
@@ -558,10 +538,7 @@ function skeletor:draw()
 		if bx2 > skeleton.boundaries.x2 then skeleton.boundaries.x2 = bx2 end
 		if by1 < skeleton.boundaries.y1 then skeleton.boundaries.y1 = by1 end
 		if by2 > skeleton.boundaries.y2 then skeleton.boundaries.y2 = by2 end	
-		
-		
-		
-		
+
 		if bone.show then
 			if parseBool(bone.shapeShow, skeleton.shapeShow) then
 				local shapeMode = bone.shapeMode or skeleton.shapeMode
@@ -570,37 +547,17 @@ function skeletor:draw()
 				local shapeSy = bone.shapeSy or skeleton.shapeSy
 				local shapeColor = bone.shapeColor or skeleton.shapeColor
 
-
-
-
-				if not(printed) then ------
-
-					love.graphics.print("norm = " .. normalizeScalingFromAngle(angle, sx, sy), 800, 10)
-					love.graphics.print("sx = " .. skeleton.sx, 800, 30)
-					love.graphics.print("sy = " .. sy, 800, 50)
-					love.graphics.print("angle = " .. angle, 800, 70)
-
-					printed = true
-
-				end
-
-
-
-
 -- local function normalizeScalingFromAngle(angle, sx, sy)
 	-- local factorY = math.abs((oneDividedByPI * (angle % math.pi)) - .5)
 	-- local factorX = .5 - factorY
 	-- return (math.abs(sx) * factorX) + (math.abs(sy) * factorY)
 -- end
 
-
-
-
 				transform(
 					shapeShape,
 					angle,
-					getMidwayBetweenNumbers(x1, x2),
-					getMidwayBetweenNumbers(y1, y2),
+					getAverage(x1, x2),
+					getAverage(y1, y2),
 					length * shapeSx,
 					length * shapeSy * 1 -- * normalizeScalingFromAngle(angle, sx, sy)
 				)
@@ -642,8 +599,8 @@ function skeletor:draw()
 				if texturePixelEffect then love.graphics.setPixelEffect(texturePixelEffect) end
 				love.graphics.draw(
 					textureImage,
-					getMidwayBetweenNumbers(x1, x2),
-					getMidwayBetweenNumbers(y1, y2),
+					getAverage(x1, x2),
+					getAverage(y1, y2),
 					angle,
 					sx,
 					sy,
