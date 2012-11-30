@@ -291,13 +291,13 @@ local defaultStyle = {
 	wireColor = {255, 255, 255},
 	jointShow = true,
 	jointMode = "fill",
-	jointShape = skeletor:getEllipseVertices(0, 0, 8, 8, 0, 30),
+	jointShape = self:getEllipseVertices(0, 0, 8, 8, 0, 30),
 	jointRotatable = false,
 	jointScalable = true,
 	jointColor = {0, 123, 255},
 	shapeShow = true,
 	shapeMode = "fill",
-	shapeShape = skeletor:getEllipseVertices(0, 0, 1, .35, 0, 30),
+	shapeShape = self:getEllipseVertices(0, 0, 1, .35, 0, 30),
 	shapeSx = 1,
 	shapeSy = 1,
 	shapeColor = {255, 255, 255},
@@ -333,18 +333,6 @@ function skeletor:setStyle(style) self.style = mergeTables(self.style, style) en
 function skeletor:getSkeletons() return self.skeletons end
 function skeletor:setSkeletons(skeletons) self.skeletons = skeletons end
 
-
-
-
-
-
-
-
-
-
-
-
-
 ----------------------------------------------------
 -- Skeleton functions
 ----------------------------------------------------
@@ -355,6 +343,7 @@ function skeletor:setSkeletons(skeletons) self.skeletons = skeletons end
 	@param   string   name
 	@param   table    properties
 	@return  void
+	@uses    parseBool()
 --]]
 function skeletor:newSkeleton(name, props)
 	props = props or {}
@@ -365,7 +354,7 @@ function skeletor:newSkeleton(name, props)
 		sy = props.sy or 1,
 		angle = props.angle or 0,
 		show = parseBool(props.show, self.style.show),
-		boundariesShow = parseBool(props.boundariesCalculate, self.style.boundariesCalculate),
+		boundariesCalculate = parseBool(props.boundariesCalculate, self.style.boundariesCalculate),
 		boundariesShow = parseBool(props.boundariesShow, self.style.boundariesShow),
 		boundariesStyle = props.boundariesStyle or self.style.boundariesStyle,
 		boundariesWidth = props.boundariesWidth or self.style.boundariesWidth,
@@ -387,7 +376,7 @@ function skeletor:newSkeleton(name, props)
 		shapeSy = props.shapeSy or self.style.shapeSy,
 		shapeColor = props.shapeColor or self.style.shapeColor,
 		textureShow = parseBool(props.textureShow, self.style.textureShow),
-		textureImage = props.textureImage,
+		textureImage = props.textureImage or self.style.textureImage,
 		textureBlendMode = props.textureBlendMode or self.style.textureBlendMode,
 		textureColor = props.textureColor or self.style.textureColor,
 		textureColorMode = props.textureColorMode or self.style.textureColorMode,
@@ -404,6 +393,7 @@ end
 	@param   string   path
 	@param   table    properties
 	@return  void
+	@uses    parseBool()
 --]]
 function skeletor:newBone(path, props)
 	local function newBone(path, i, bone, props)
@@ -449,7 +439,6 @@ end
 	Edits a skeleton
 
 	@param   string   name
-	@param   string   path
 	@param   table    properties
 	@return  void
 --]]
@@ -513,6 +502,7 @@ end
 	@param   string   name of the new skeleton
 	@param   table    skeleton properties to edit
 	@return  void
+	@uses    copyDeepTable(), skeletor:editSkeleton()
 --]]
 function skeletor:cloneSkeleton(from, clone, props)
 	self.skeletons[clone] = copyDeepTable(self.skeletons[from])
@@ -522,7 +512,15 @@ end
 
 
 
-local printed = false ------
+
+
+
+
+
+
+
+
+
 
 
 
@@ -535,7 +533,7 @@ local printed = false ------
 function skeletor:draw()
 
 
-printed = false ------
+
 
 
 -- 1) -- Transformations ont the skeleton after all boundaries have been drawn.
