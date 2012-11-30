@@ -40,43 +40,43 @@ THE SOFTWARE.
 	@return  table    copied table
 --]]
 local function copyTable(t)
-	local copy = {}
-	for k,v in pairs(t) do copy[k] = v end
-	return copy
+	local tCopy = {}
+	for k,v in pairs(t) do tCopy[k] = v end
+	return tCopy
 end
 
 --[[
-	Copies a multi-dimension table
+	Copies a multi dimension table
 
 	@param   table    table
 	@return  table    copied table
 --]]
 local function copyDeepTable(t)
-	local copy = {}
+	local tCopy = {}
 	for k,v in pairs(t) do
 		if type(v) == "table" then
-			copy[k] = copyDeepTable(v)
+			tCopy[k] = copyDeepTable(v)
 		else
-			copy[k] = v
+			tCopy[k] = v
 		end
 	end
-	return copy
+	return tCopy
 end
 
 --[[
 	Merges two single dimension tables
 
-	The values in t1 are overwritten with those in t2.
+	Note: The values in t1 are overwritten by those in t2.
 
 	@param   table    table 1
 	@param   table    table 2
 	@return  table    merged tables
-	@uses    copyTable
+	@uses    copyTable()
 --]]
 local function mergeTables(t1, t2)
-	local merged = copyTable(t1)
-	for k,v in pairs(t2) do merged[k] = v end
-	return merged
+	local tMerged = copyTable(t1)
+	for k,v in pairs(t2) do tMerged[k] = v end
+	return tMerged
 end
 
 --[[
@@ -105,11 +105,11 @@ end
 
 	@param   mixed    value
 	@param   bool     default value
-	@return  bool     parsed value
+	@return  mixed    parsed value
 --]]
-local function parseBool(v, default)
+local function parseBool(v, vDefault)
 	if v == nil then
-		return default
+		return vDefault
 	else
 		return v
 	end
@@ -127,7 +127,7 @@ local function polarToCartesian(radius, angle)
 end
 
 --[[
-	Gets the distance between two coordinates
+	Gets the distance between two coordinates (Pythagore)
 
 	@param   number   x1
 	@param   number   y1
@@ -150,9 +150,7 @@ end
 local function rotate(x, y, angle)
 	local a = math.atan2(y, x) + angle
 	local d = math.sqrt(math.pow(x, 2) + math.pow(y, 2))
-	x = d * math.cos(a)
-	y = d * math.sin(a)
-	return x, y
+	return d * math.cos(a), d * math.sin(a)
 end
 
 --[[
@@ -185,16 +183,16 @@ end
 	Applies rotation, translation, and scaling to a set of vertices
 
 	@param   table    vertices
-	@param   number   angle
+	@param   number   angle in radians
 	@param   number   offset factor of x
 	@param   number   offset factor of y
 	@param   number   scale factor of x
 	@param   number   scale factor or y
 	@return  void
-	@uses    rotate(), translate(), scale()
+	@uses    scale(), rotate(), translate()
 --]]
 local function transform(v, angle, ox, oy, sx, sy)
-	for i=1, #v, 2 do
+	for i = 1, #v, 2 do
 		if sx ~= 1 or sy ~= 1 then v[i], v[i + 1] = scale(v[i], v[i + 1], sx, sy) end
 		if angle ~= 0 then v[i], v[i + 1] = rotate(v[i], v[i+1], angle) end
 		if ox ~= 0 or oy ~= 0 then v[i], v[i + 1] = translate(v[i], v[i + 1], ox, oy) end
@@ -202,35 +200,34 @@ local function transform(v, angle, ox, oy, sx, sy)
 end
 
 --[[
-	Gets the midway between two numbers
-
-	@param   number   number 1
-	@param   number   number 2
-	@return  number   midway
+	Constant: 1 divided by PI
 --]]
-local function getMidwayBetweenNumbers(n1, n2)
-	return n1 + ((n2 - n1) / 2)
-end
-
---[[
-	Constant: One divided by PI
-
-	@usedby    normalizeScalingFromAngle()
---]]
-local oneDividedByPI = 1 / math.pi
+local ConstOneDividedByPI = 1 / math.pi
 
 --[[
 	Normalizes scaling from an angle
 
 	@param   number   angle in radians
-	@param   number   sx
-	@param   number   sy
+	@param   number   scale factor of x
+	@param   number   scale factor of y
 	@return  number   normalized scaling
+	@uses    ConstOneDividedByPI
 --]]
 local function normalizeScalingFromAngle(angle, sx, sy)
-	local factorY = math.abs((oneDividedByPI * (angle % math.pi)) - .5)
+	local factorY = math.abs((ConstOneDividedByPI * (angle % math.pi)) - .5)
 	local factorX = .5 - factorY
 	return (math.abs(sx) * factorX) + (math.abs(sy) * factorY)
+end
+
+--[[
+	Gets the average of two numbers
+
+	@param   number   number 1
+	@param   number   number 2
+	@return  number   average
+--]]
+local function getAverage(n1, n2)
+	return (n1 + n2) / 2
 end
 
 ----------------------------------------------------
@@ -247,8 +244,8 @@ skeletor.__index = skeletor
 	@param   number   center y
 	@param   number   width
 	@param   number   height
-	@param   number   angle
-	@param   number   numSegments
+	@param   number   angle in radians
+	@param   number   number of segments
 	@return  table    vertices {x1, y1, x2, y2, ...}
 --]]
 function skeletor:getEllipseVertices(cx, cy, width, height, angle, numSegments)
@@ -278,6 +275,8 @@ end
 
 --[[
 	Default style
+
+	uses@    skeletor:getEllipseVertices()
 --]]
 local defaultStyle = {
 	show = true,
@@ -333,6 +332,18 @@ function skeletor:getStyle() return self.style end
 function skeletor:setStyle(style) self.style = mergeTables(self.style, style) end
 function skeletor:getSkeletons() return self.skeletons end
 function skeletor:setSkeletons(skeletons) self.skeletons = skeletons end
+
+
+
+
+
+
+
+
+
+
+
+
 
 ----------------------------------------------------
 -- Skeleton functions
@@ -508,12 +519,29 @@ function skeletor:cloneSkeleton(from, clone, props)
 	self:editSkeleton(clone, props or {})
 end
 
+
+
+
+local printed = false ------
+
+
+
+
 --[[
 	Draws the skeletons
 
 	@return  void
 --]]
 function skeletor:draw()
+
+
+printed = false ------
+
+
+-- 1) -- Transformations ont the skeleton after all boundaries have been drawn.
+-- 2) -- Have an offset for rotation.
+
+
 	local function drawBones(bone, x1, y1, skeleton)
 		local sx, sy = scale(bone.sx, bone.sy, skeleton.sx, skeleton.sy)
 		local angle = bone.angle + skeleton.angle
@@ -522,6 +550,20 @@ function skeletor:draw()
 		x2, y2 = translate(x2, y2, x1, y1)
 		angle = math.atan2(y2 - y1, x2 - x1)
 		local length = getCoordinatesDistance(x1, y1, x2, y2)
+		
+		
+		-- Always calculate boundaries
+		local bx1, by1, bx2, by2
+		if x1 < x2 then bx1, bx2 = x1, x2 else bx1, bx2 = x2, x1 end
+		if y1 < y2 then by1, by2 = y1, y2 else by1, by2 = y2, y1 end
+		if bx1 < skeleton.boundaries.x1 then skeleton.boundaries.x1 = bx1 end
+		if bx2 > skeleton.boundaries.x2 then skeleton.boundaries.x2 = bx2 end
+		if by1 < skeleton.boundaries.y1 then skeleton.boundaries.y1 = by1 end
+		if by2 > skeleton.boundaries.y2 then skeleton.boundaries.y2 = by2 end	
+		
+		
+		
+		
 		if bone.show then
 			if parseBool(bone.shapeShow, skeleton.shapeShow) then
 				local shapeMode = bone.shapeMode or skeleton.shapeMode
@@ -529,13 +571,40 @@ function skeletor:draw()
 				local shapeSx = bone.shapeSx or skeleton.shapeSx
 				local shapeSy = bone.shapeSy or skeleton.shapeSy
 				local shapeColor = bone.shapeColor or skeleton.shapeColor
+
+
+
+
+				if not(printed) then ------
+
+					love.graphics.print("norm = " .. normalizeScalingFromAngle(angle, sx, sy), 800, 10)
+					love.graphics.print("sx = " .. skeleton.sx, 800, 30)
+					love.graphics.print("sy = " .. sy, 800, 50)
+					love.graphics.print("angle = " .. angle, 800, 70)
+
+					printed = true
+
+				end
+
+
+
+
+-- local function normalizeScalingFromAngle(angle, sx, sy)
+	-- local factorY = math.abs((oneDividedByPI * (angle % math.pi)) - .5)
+	-- local factorX = .5 - factorY
+	-- return (math.abs(sx) * factorX) + (math.abs(sy) * factorY)
+-- end
+
+
+
+
 				transform(
 					shapeShape,
 					angle,
 					getMidwayBetweenNumbers(x1, x2),
 					getMidwayBetweenNumbers(y1, y2),
 					length * shapeSx,
-					length * shapeSy * normalizeScalingFromAngle(angle, sx, sy)
+					length * shapeSy * 1 -- * normalizeScalingFromAngle(angle, sx, sy)
 				)
 				love.graphics.setColor(shapeColor)
 				love.graphics.polygon(shapeMode, shapeShape)
@@ -585,13 +654,6 @@ function skeletor:draw()
 				)
 				if texturePixelEffect then love.graphics.setPixelEffect() end
 			end
-			local bx1, by1, bx2, by2
-			if x1 < x2 then bx1, bx2 = x1, x2 else bx1, bx2 = x2, x1 end
-			if y1 < y2 then by1, by2 = y1, y2 else by1, by2 = y2, y1 end
-			if bx1 < skeleton.boundaries.x1 then skeleton.boundaries.x1 = bx1 end
-			if bx2 > skeleton.boundaries.x2 then skeleton.boundaries.x2 = bx2 end
-			if by1 < skeleton.boundaries.y1 then skeleton.boundaries.y1 = by1 end
-			if by2 > skeleton.boundaries.y2 then skeleton.boundaries.y2 = by2 end
 		end
 		for _,childBone in pairs(bone.childBones) do
 			drawBones(childBone, x2, y2, skeleton)
