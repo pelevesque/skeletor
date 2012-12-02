@@ -40,9 +40,9 @@ THE SOFTWARE.
 	@return  table    copied table
 --]]
 local function copyTable(t)
-	local tCopy = {}
-	for k,v in pairs(t) do tCopy[k] = v end
-	return tCopy
+	local copy = {}
+	for k,v in pairs(t) do copy[k] = v end
+	return copy
 end
 
 --[[
@@ -52,15 +52,15 @@ end
 	@return  table    copied table
 --]]
 local function copyDeepTable(t)
-	local tCopy = {}
+	local copy = {}
 	for k,v in pairs(t) do
 		if type(v) == "table" then
-			tCopy[k] = copyDeepTable(v)
+			copy[k] = copyDeepTable(v)
 		else
-			tCopy[k] = v
+			copy[k] = v
 		end
 	end
-	return tCopy
+	return copy
 end
 
 --[[
@@ -74,9 +74,9 @@ end
 	@uses    copyTable()
 --]]
 local function mergeTables(t1, t2)
-	local tMerged = copyTable(t1)
-	for k,v in pairs(t2) do tMerged[k] = v end
-	return tMerged
+	local merged = copyTable(t1)
+	for k,v in pairs(t2) do merged[k] = v end
+	return merged
 end
 
 --[[
