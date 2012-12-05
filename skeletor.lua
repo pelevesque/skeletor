@@ -230,6 +230,38 @@ local function getAverage(n1, n2)
 	return (n1 + n2) / 2
 end
 
+--[[
+	Update box boundaries on grow
+
+	@param   table    box boundaries
+	@param   number   x1
+	@param   number   x2
+	@param   number   y1
+	@return  number   y2
+	@return  void
+--]]
+local function updateBoxBoundariesOnGrow(box, x1, x2, y1, y2)
+	if x1 < box.x1 then box.x1 = x1 end
+	if x2 > box.x2 then box.x2 = x2 end
+	if y1 < box.y1 then box.y1 = y1 end
+	if y2 > box.y2 then box.y2 = y2 end
+end
+
+--[[
+	Orders two numbers
+
+	@param   number   n1
+	@param   number   n2
+	@return  numbers  reordered numbers (n1, n2)
+--]]
+local function orderTwoNumbers(n1, n2)
+	if n2 < n1 then
+		return n2, n1
+	else
+		return n1, n2
+	end
+end
+
 ----------------------------------------------------
 -- Module setup
 ----------------------------------------------------
@@ -514,13 +546,10 @@ end
 
 	@return  void
 	@uses    scale(), polarToCartesian(), translate(), getCoordinatesDistance()
-	@uses    parseBool(), copyTable(), getAverage(), 
+	@uses    orderTwoNumbers(), updateBoxBoundariesOnGrow(), parseBool()
+	@uses    copyTable(), getAverage()
 --]]
 function skeletor:draw()
-
--- 1) -- Transformations on the skeleton after all boundaries have been drawn.
--- 2) -- Have an offset for rotation.
-
 	local function drawBones(bone, x1, y1, skeleton)
 		local sx, sy = scale(bone.sx, bone.sy, skeleton.sx, skeleton.sy)
 		local angle = bone.angle + skeleton.angle
@@ -529,15 +558,15 @@ function skeletor:draw()
 		x2, y2 = translate(x2, y2, x1, y1)
 		angle = math.atan2(y2 - y1, x2 - x1)
 		local length = getCoordinatesDistance(x1, y1, x2, y2)
+		local x1T, x2T = orderTwoNumbers(x1, x2)
+		local y2T, y2T = orderTwoNumbers(y1, y2)
+		updateBoxBoundariesOnGrow(skeleton.boundaries, x1T, y1T, x2T, y2T)
 
-		-- Always calculate boundaries?
-		local bx1, by1, bx2, by2
-		if x1 < x2 then bx1, bx2 = x1, x2 else bx1, bx2 = x2, x1 end
-		if y1 < y2 then by1, by2 = y1, y2 else by1, by2 = y2, y1 end
-		if bx1 < skeleton.boundaries.x1 then skeleton.boundaries.x1 = bx1 end
-		if bx2 > skeleton.boundaries.x2 then skeleton.boundaries.x2 = bx2 end
-		if by1 < skeleton.boundaries.y1 then skeleton.boundaries.y1 = by1 end
-		if by2 > skeleton.boundaries.y2 then skeleton.boundaries.y2 = by2 end	
+
+
+
+
+
 
 		if bone.show then
 			if parseBool(bone.shapeShow, skeleton.shapeShow) then
