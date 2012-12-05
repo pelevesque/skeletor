@@ -202,7 +202,7 @@ end
 --[[
 	Constant: 1 divided by PI
 --]]
-local ConstOneDividedByPI = 1 / math.pi
+local constOneDividedByPI = 1 / math.pi
 
 --[[
 	Normalizes scaling from an angle
@@ -211,10 +211,10 @@ local ConstOneDividedByPI = 1 / math.pi
 	@param   number   scale factor of x
 	@param   number   scale factor of y
 	@return  number   normalized scaling
-	@uses    ConstOneDividedByPI
+	@uses    constOneDividedByPI
 --]]
 local function normalizeScalingFromAngle(angle, sx, sy)
-	local factorY = math.abs((ConstOneDividedByPI * (angle % math.pi)) - .5)
+	local factorY = math.abs((constOneDividedByPI * (angle % math.pi)) - .5)
 	local factorX = .5 - factorY
 	return (math.abs(sx) * factorX) + (math.abs(sy) * factorY)
 end
