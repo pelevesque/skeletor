@@ -261,14 +261,14 @@ function skeletor:getEllipseVertices(cx, cy, width, height, angle, numSegments)
 	for i = 1, numSegments do
 		local vx = x
 		local vy = y * sy
-		local Tvx = vx
+		local vxTemp = vx
 		vx = vy * math.sin(angle) + vx * math.cos(angle)
-		vy = Tvx * math.sin(angle) - vy * math.cos(angle)
+		vy = vxTemp * math.sin(angle) - vy * math.cos(angle)
 		table.insert(vertices, vx + cx)
 		table.insert(vertices, vy + cy)
-		local Tx = x
+		local xTemp = x
 		x = (cosine * x) - (sine * y)
-		y = (sine * Tx) + (cosine * y)
+		y = (sine * xTemp) + (cosine * y)
 	end
 	return vertices
 end
