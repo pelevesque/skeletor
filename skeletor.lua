@@ -107,9 +107,9 @@ end
 	@param   bool     default value
 	@return  mixed    parsed value
 --]]
-local function parseBool(v, vDefault)
+local function parseBool(v, default)
 	if v == nil then
-		return vDefault
+		return default
 	else
 		return v
 	end
@@ -235,12 +235,12 @@ end
 
 	@param   table    box boundaries
 	@param   number   x1
-	@param   number   x2
 	@param   number   y1
+	@param   number   x2
 	@return  number   y2
 	@return  void
 --]]
-local function updateBoxBoundariesOnGrow(box, x1, x2, y1, y2)
+local function updateBoxBoundariesOnGrow(box, x1, y1, x2, y2)
 	if x1 < box.x1 then box.x1 = x1 end
 	if x2 > box.x2 then box.x2 = x2 end
 	if y1 < box.y1 then box.y1 = y1 end
@@ -293,14 +293,14 @@ function skeletor:getEllipseVertices(cx, cy, width, height, angle, numSegments)
 	for i = 1, numSegments do
 		local vx = x
 		local vy = y * sy
-		local vxTemp = vx
+		local vxT = vx
 		vx = vy * math.sin(angle) + vx * math.cos(angle)
-		vy = vxTemp * math.sin(angle) - vy * math.cos(angle)
+		vy = vxT * math.sin(angle) - vy * math.cos(angle)
 		table.insert(vertices, vx + cx)
 		table.insert(vertices, vy + cy)
-		local xTemp = x
+		local xT = x
 		x = (cosine * x) - (sine * y)
-		y = (sine * xTemp) + (cosine * y)
+		y = (sine * xT) + (cosine * y)
 	end
 	return vertices
 end
@@ -559,15 +559,10 @@ function skeletor:draw()
 		angle = math.atan2(y2 - y1, x2 - x1)
 		local length = getCoordinatesDistance(x1, y1, x2, y2)
 		local x1T, x2T = orderTwoNumbers(x1, x2)
-		local y2T, y2T = orderTwoNumbers(y1, y2)
+		local y1T, y2T = orderTwoNumbers(y1, y2)
 		updateBoxBoundariesOnGrow(skeleton.boundaries, x1T, y1T, x2T, y2T)
-
-
-
-
-
-
-
+		local xAverage = getAverage(x1, x2)
+		local yAverage = getAverage(y1, y2)
 		if bone.show then
 			if parseBool(bone.shapeShow, skeleton.shapeShow) then
 				local shapeMode = bone.shapeMode or skeleton.shapeMode
@@ -575,20 +570,13 @@ function skeletor:draw()
 				local shapeSx = bone.shapeSx or skeleton.shapeSx
 				local shapeSy = bone.shapeSy or skeleton.shapeSy
 				local shapeColor = bone.shapeColor or skeleton.shapeColor
-
--- local function normalizeScalingFromAngle(angle, sx, sy)
-	-- local factorY = math.abs((oneDividedByPI * (angle % math.pi)) - .5)
-	-- local factorX = .5 - factorY
-	-- return (math.abs(sx) * factorX) + (math.abs(sy) * factorY)
--- end
-
 				transform(
 					shapeShape,
 					angle,
-					getAverage(x1, x2),
-					getAverage(y1, y2),
+					xAverage,
+					yAverage,
 					length * shapeSx,
-					length * shapeSy * 1 -- * normalizeScalingFromAngle(angle, sx, sy)
+					length * shapeSy * normalizeScalingFromAngle(angle, sx, sy)
 				)
 				love.graphics.setColor(shapeColor)
 				love.graphics.polygon(shapeMode, shapeShape)
@@ -628,8 +616,8 @@ function skeletor:draw()
 				if texturePixelEffect then love.graphics.setPixelEffect(texturePixelEffect) end
 				love.graphics.draw(
 					textureImage,
-					getAverage(x1, x2),
-					getAverage(y1, y2),
+					xAverage,
+					yAverage,
 					angle,
 					sx,
 					sy,
