@@ -320,7 +320,7 @@ local defaultStyle = {
 	wireShow = false,
 	wireStyle = "smooth",
 	wireWidth = 1,
-	wireColor = {255, 255, 255},
+	wireColor = {0, 0, 0},
 	jointShow = true,
 	jointMode = "fill",
 	jointShape = skeletor:getEllipseVertices(0, 0, 8, 8, 0, 30),
@@ -564,23 +564,6 @@ function skeletor:draw()
 		local xAverage = getAverage(x1, x2)
 		local yAverage = getAverage(y1, y2)
 		if bone.show then
-			if parseBool(bone.shapeShow, skeleton.shapeShow) then
-				local shapeMode = bone.shapeMode or skeleton.shapeMode
-				local shapeShape = copyTable(bone.shapeShape or skeleton.shapeShape)
-				local shapeSx = bone.shapeSx or skeleton.shapeSx
-				local shapeSy = bone.shapeSy or skeleton.shapeSy
-				local shapeColor = bone.shapeColor or skeleton.shapeColor
-				transform(
-					shapeShape,
-					angle,
-					xAverage,
-					yAverage,
-					length * shapeSx,
-					length * shapeSy * normalizeScalingFromAngle(angle, sx, sy)
-				)
-				love.graphics.setColor(shapeColor)
-				love.graphics.polygon(shapeMode, shapeShape)
-			end
 			if parseBool(bone.wireShow, skeleton.wireShow) then
 				local wireStyle = bone.wireStyle or skeleton.wireStyle
 				local wireWidth = bone.wireWidth or skeleton.wireWidth
@@ -603,6 +586,23 @@ function skeletor:draw()
 				love.graphics.polygon(jointMode, jointShape)
 				transform(jointShape, 0, x2 - x1, y2 - y1, 1, 1)
 				love.graphics.polygon(jointMode, jointShape)
+			end
+			if parseBool(bone.shapeShow, skeleton.shapeShow) then
+				local shapeMode = bone.shapeMode or skeleton.shapeMode
+				local shapeShape = copyTable(bone.shapeShape or skeleton.shapeShape)
+				local shapeSx = bone.shapeSx or skeleton.shapeSx
+				local shapeSy = bone.shapeSy or skeleton.shapeSy
+				local shapeColor = bone.shapeColor or skeleton.shapeColor
+				transform(
+					shapeShape,
+					angle,
+					xAverage,
+					yAverage,
+					length * shapeSx,
+					length * shapeSy * normalizeScalingFromAngle(angle, sx, sy)
+				)
+				love.graphics.setColor(shapeColor)
+				love.graphics.polygon(shapeMode, shapeShape)
 			end
 			if parseBool(bone.textureShow, skeleton.textureShow) then
 				local textureImage = bone.textureImage or skeleton.textureImage
