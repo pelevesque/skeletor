@@ -101,13 +101,13 @@ local function splitPath(path)
 end
 
 --[[
-	Parses a boolean
+	Gets a value, or the default value
 
 	@param   mixed    value
 	@param   bool     default value
-	@return  mixed    parsed value
+	@return  mixed    picked value
 --]]
-local function parseBool(v, default)
+local function getValOrDef(v, default)
 	if v == nil then
 		return default
 	else
@@ -135,7 +135,7 @@ end
 	@param   number   y2
 	@return  number   distance
 --]]
-local function getCoordinatesDistance(x1, y1, x2, y2)
+local function getDistanceOfCoords(x1, y1, x2, y2)
 	return math.sqrt(math.pow((x2 - x1), 2) + math.pow((y2 - y1), 2))
 end
 
