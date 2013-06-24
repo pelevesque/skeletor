@@ -1,32 +1,12 @@
 --[[
-Title:   Skeletor module for Love2D
-Author:  Pierre-Emmanuel Lévesque
-Date:    August 11th, 2012
-Version: 1.0
-
-Copyright (c) 2012 Pierre-Emmanuel Lévesque
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-Except as contained in this notice, the name(s) of the above copyright holders
-shall not be used in advertising or otherwise to promote the sale, use or
-other dealings in this Software without prior written authorization.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+Title:     skeletor
+Use:       2D animation module for the LÖVE 2D game engine
+Version:   1.0
+Author:    Pierre-Emmanuel Lévesque
+Email:     pierre.e.levesque@gmail.com
+Date:      August 11th, 2012
+Copyright: Copyright 2012, Pierre-Emmanuel Lévesque
+License:   MIT license - @see README.md
 --]]
 
 ----------------------------------------------------
@@ -375,7 +355,7 @@ function skeletor:setSkeletons(skeletons) self.skeletons = skeletons end
 	@param   string   name
 	@param   table    properties
 	@return  void
-	@uses    parseBool()
+	@uses    getValorDef()
 --]]
 function skeletor:newSkeleton(name, props)
 	props = props or {}
@@ -385,29 +365,29 @@ function skeletor:newSkeleton(name, props)
 		sx = props.sx or 1,
 		sy = props.sy or 1,
 		angle = props.angle or 0,
-		show = parseBool(props.show, self.style.show),
-		boundariesCalculate = parseBool(props.boundariesCalculate, self.style.boundariesCalculate),
-		boundariesShow = parseBool(props.boundariesShow, self.style.boundariesShow),
+		show = getValorDef(props.show, self.style.show),
+		boundariesCalculate = getValorDef(props.boundariesCalculate, self.style.boundariesCalculate),
+		boundariesShow = getValorDef(props.boundariesShow, self.style.boundariesShow),
 		boundariesStyle = props.boundariesStyle or self.style.boundariesStyle,
 		boundariesWidth = props.boundariesWidth or self.style.boundariesWidth,
 		boundariesColor = props.boundariesColor or self.style.boundariesColor,
-		wireShow = parseBool(props.wireShow, self.style.wireShow),
+		wireShow = getValorDef(props.wireShow, self.style.wireShow),
 		wireStyle = props.wireStyle or self.style.wireStyle,
 		wireWidth = props.wireWidth or self.style.wireWidth,
 		wireColor = props.wireColor or self.style.wireColor,
-		jointShow = parseBool(props.jointShow, self.style.jointShow),
+		jointShow = getValorDef(props.jointShow, self.style.jointShow),
 		jointMode = props.jointMode or self.style.jointMode,
 		jointShape = props.jointShape or self.style.jointShape,
-		jointRotatable = parseBool(props.jointRotatable, self.style.jointRotatable),
-		jointScalable = parseBool(props.jointScalable, self.style.jointScalable),
+		jointRotatable = getValorDef(props.jointRotatable, self.style.jointRotatable),
+		jointScalable = getValorDef(props.jointScalable, self.style.jointScalable),
 		jointColor = props.jointColor or self.style.jointColor,
-		shapeShow = parseBool(props.shapeShow, self.style.shapeShow),
+		shapeShow = getValorDef(props.shapeShow, self.style.shapeShow),
 		shapeMode = props.shapeMode or self.style.shapeMode,
 		shapeShape = props.shapeShape or self.style.shapeShape,
 		shapeSx = props.shapeSx or self.style.shapeSx,
 		shapeSy = props.shapeSy or self.style.shapeSy,
 		shapeColor = props.shapeColor or self.style.shapeColor,
-		textureShow = parseBool(props.textureShow, self.style.textureShow),
+		textureShow = getValorDef(props.textureShow, self.style.textureShow),
 		textureImage = props.textureImage or self.style.textureImage,
 		textureBlendMode = props.textureBlendMode or self.style.textureBlendMode,
 		textureColor = props.textureColor or self.style.textureColor,
@@ -435,7 +415,7 @@ function skeletor:newBone(path, props)
 				sx = props.sx or 1,
 				sy = props.sy or 1,
 				angle = props.angle or 0,
-				show = parseBool(props.show, true),
+				show = getValorDef(props.show, true),
 				wireShow = props.wireShow,
 				wireStyle = props.wireStyle,
 				wireWidth = props.wireWidth,
