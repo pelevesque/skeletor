@@ -4,7 +4,7 @@ Use:       2D animation module for the LÖVE 2D game engine
 Version:   1.0
 Author:    Pierre-Emmanuel Lévesque
 Email:     pierre.e.levesque@gmail.com
-Date:      August 11th, 2012
+Created:   August 11th, 2012
 Copyright: Copyright 2012, Pierre-Emmanuel Lévesque
 License:   MIT license - @see README.md
 --]]
@@ -14,28 +14,28 @@ License:   MIT license - @see README.md
 ----------------------------------------------------
 
 --[[
-	Copies a single dimension table
+	Copies a single dimension table (shallow)
 
 	@param   table    table
 	@return  table    copied table
 --]]
-local function copyTable(t)
+local function copyTableShallow(t)
 	local copy = {}
 	for k,v in pairs(t) do copy[k] = v end
 	return copy
 end
 
 --[[
-	Copies a multi dimension table
+	Copies a multi dimension table (deep)
 
 	@param   table    table
 	@return  table    copied table
 --]]
-local function copyDeepTable(t)
+local function copyTableDeep(t)
 	local copy = {}
 	for k,v in pairs(t) do
 		if type(v) == "table" then
-			copy[k] = copyDeepTable(v)
+			copy[k] = copyTableDeep(v)
 		else
 			copy[k] = v
 		end
@@ -51,10 +51,10 @@ end
 	@param   table    table 1
 	@param   table    table 2
 	@return  table    merged tables
-	@uses    copyTable()
+	@uses    copyTableShallow()
 --]]
-local function mergeTables(t1, t2)
-	local merged = copyTable(t1)
+local function mergeTablesShallow(t1, t2)
+	local merged = copyTableShallow(t1)
 	for k,v in pairs(t2) do merged[k] = v end
 	return merged
 end
@@ -107,7 +107,7 @@ local function polarToCartesian(radius, angle)
 end
 
 --[[
-	Gets the distance between two coordinates (Pythagore)
+	Gets the distance between two coordinates (using Pythagore's method)
 
 	@param   number   x1
 	@param   number   y1
@@ -115,7 +115,7 @@ end
 	@param   number   y2
 	@return  number   distance
 --]]
-local function getDistanceOfCoords(x1, y1, x2, y2)
+local function getDistanceBetweenCoords(x1, y1, x2, y2)
 	return math.sqrt(math.pow((x2 - x1), 2) + math.pow((y2 - y1), 2))
 end
 
@@ -293,32 +293,26 @@ end
 local defaultStyle = {
 	show = true,
 	boundariesCalculate = false,
-	boundariesShow = true,
+	boundariesShow = false,
 	boundariesStyle = "smooth",
 	boundariesWidth = 1,
-	boundariesColor = {255, 0, 0},
-	wireShow = false,
+	boundariesColor = {255, 255, 255},
+	wireShow = true,
 	wireStyle = "smooth",
 	wireWidth = 1,
-	wireColor = {0, 0, 0},
+	wireColor = {255, 255, 255},
 	jointShow = true,
 	jointMode = "fill",
-	jointShape = skeletor:getEllipseVertices(0, 0, 8, 8, 0, 30),
+	jointShape = skeletor:getEllipseVertices(0, 0, 8, 8, math.rad(0), 30),
 	jointRotatable = false,
 	jointScalable = true,
-	jointColor = {0, 123, 255},
-	shapeShow = true,
-	shapeMode = "fill",
+	jointColor = {255, 0, 0 },
+	shapeShow = false,
+	shapeMode = "line",
 	shapeShape = skeletor:getEllipseVertices(0, 0, 1, .35, 0, 30),
 	shapeSx = 1,
 	shapeSy = 1,
-	shapeColor = {255, 255, 255},
-	textureShow = false,
-	textureImage = nil,
-	textureBlendMode = "alpha",
-	textureColor = {255, 255, 255},
-	textureColorMode = "replace",
-	texturePixelEffect = nil
+	shapeColor = {0, 255, 0},
 }
 
 --[[
@@ -327,11 +321,11 @@ local defaultStyle = {
 	@param   table    style [def: {}]
 	@param   table    skeletons [def: {}]
 	@return  table    metatable
-	@uses    mergeTables()
+	@uses    mergeTablesShallow(()
 --]]
 local function new(style, skeletons)
 	return setmetatable({
-		style = mergeTables(defaultStyle, style or {}),
+		style = mergeTablesShallow(defaultStyle, style or {}),
 		skeletons = skeletons or {}
 	}, skeletor)
 end
@@ -341,7 +335,7 @@ end
 ----------------------------------------------------
 
 function skeletor:getStyle() return self.style end
-function skeletor:setStyle(style) self.style = mergeTables(self.style, style) end
+function skeletor:setStyle(style) self.style = mergeTablesShallow(self.style, style) end
 function skeletor:getSkeletons() return self.skeletons end
 function skeletor:setSkeletons(skeletons) self.skeletons = skeletons end
 
@@ -365,43 +359,40 @@ function skeletor:newSkeleton(name, props)
 		sx = props.sx or 1,
 		sy = props.sy or 1,
 		angle = props.angle or 0,
-		show = getValorDef(props.show, self.style.show),
-		boundariesCalculate = getValorDef(props.boundariesCalculate, self.style.boundariesCalculate),
-		boundariesShow = getValorDef(props.boundariesShow, self.style.boundariesShow),
+		show = getValOrDef(props.show, self.style.show),
+		boundariesCalculate = getValOrDef(props.boundariesCalculate, self.style.boundariesCalculate),
+		boundariesShow = getValOrDef(props.boundariesShow, self.style.boundariesShow),
 		boundariesStyle = props.boundariesStyle or self.style.boundariesStyle,
 		boundariesWidth = props.boundariesWidth or self.style.boundariesWidth,
 		boundariesColor = props.boundariesColor or self.style.boundariesColor,
-		wireShow = getValorDef(props.wireShow, self.style.wireShow),
+		wireShow = getValOrDef(props.wireShow, self.style.wireShow),
 		wireStyle = props.wireStyle or self.style.wireStyle,
 		wireWidth = props.wireWidth or self.style.wireWidth,
 		wireColor = props.wireColor or self.style.wireColor,
-		jointShow = getValorDef(props.jointShow, self.style.jointShow),
+		jointShow = getValOrDef(props.jointShow, self.style.jointShow),
 		jointMode = props.jointMode or self.style.jointMode,
 		jointShape = props.jointShape or self.style.jointShape,
-		jointRotatable = getValorDef(props.jointRotatable, self.style.jointRotatable),
-		jointScalable = getValorDef(props.jointScalable, self.style.jointScalable),
+		jointRotatable = getValOrDef(props.jointRotatable, self.style.jointRotatable),
+		jointScalable = getValOrDef(props.jointScalable, self.style.jointScalable),
 		jointColor = props.jointColor or self.style.jointColor,
-		shapeShow = getValorDef(props.shapeShow, self.style.shapeShow),
+		shapeShow = getValOrDef(props.shapeShow, self.style.shapeShow),
 		shapeMode = props.shapeMode or self.style.shapeMode,
 		shapeShape = props.shapeShape or self.style.shapeShape,
 		shapeSx = props.shapeSx or self.style.shapeSx,
 		shapeSy = props.shapeSy or self.style.shapeSy,
 		shapeColor = props.shapeColor or self.style.shapeColor,
-		textureShow = getValorDef(props.textureShow, self.style.textureShow),
-		textureImage = props.textureImage or self.style.textureImage,
-		textureBlendMode = props.textureBlendMode or self.style.textureBlendMode,
-		textureColor = props.textureColor or self.style.textureColor,
-		textureColorMode = props.textureColorMode or self.style.textureColorMode,
-		texturePixelEffect = props.texturePixelEffect or self.style.texturePixelEffect,
 		boundaries = {},
 		childBones = {}
 	}
+	self.skeletons[name].boundaries.x1 = 99999
+	self.skeletons[name].boundaries.y1 = 99999
+	self.skeletons[name].boundaries.x2 = -99999
+	self.skeletons[name].boundaries.y2 = -99999
 end
 
 --[[
 	Creates a new bone
 
-	@param   string   name
 	@param   string   path
 	@param   table    properties
 	@return  void
@@ -415,7 +406,7 @@ function skeletor:newBone(path, props)
 				sx = props.sx or 1,
 				sy = props.sy or 1,
 				angle = props.angle or 0,
-				show = getValorDef(props.show, true),
+				show = getValOrDef(props.show, true),
 				wireShow = props.wireShow,
 				wireStyle = props.wireStyle,
 				wireWidth = props.wireWidth,
@@ -432,12 +423,6 @@ function skeletor:newBone(path, props)
 				shapeSx = props.shapeSx,
 				shapeSy = props.shapeSy,
 				shapeColor = props.shapeColor,
-				textureShow = props.textureShow,
-				textureImage = props.textureImage,
-				textureBlendMode = props.textureBlendMode,
-				textureColor = props.textureColor,
-				textureColorMode = props.textureColorMode,
-				texturePixelEffect = props.texturePixelEffect,
 				childBones = {}
 			}
 		else
@@ -446,6 +431,23 @@ function skeletor:newBone(path, props)
 	end
 	newBone(splitPath(path), 1, self.skeletons, props or {})
 end
+
+--[[
+	Gets a property from a skeleton
+
+	@param   string   name
+	@param   string   property name
+	@param   mixed    property value
+--]]
+function skeletor:getSkeletonProperty(name, propName)
+	return self.skeletons[name][propName]
+end
+
+--[[
+	Gets a property from a bone (TODO)
+--]]
+
+
 
 --[[
 	Edits a skeleton
@@ -525,9 +527,9 @@ end
 	Draws the skeletons
 
 	@return  void
-	@uses    scale(), polarToCartesian(), translate(), getCoordinatesDistance()
-	@uses    orderTwoNumbers(), updateBoxBoundariesOnGrow(), parseBool()
-	@uses    copyTable(), getAverage()
+	@uses    scale(), polarToCartesian(), translate(), getDistanceBetweenCoords()
+	@uses    orderTwoNumbers(), updateBoxBoundariesOnGrow(), getValOrDef()
+	@uses    copyTableShallow(), getAverage()
 --]]
 function skeletor:draw()
 	local function drawBones(bone, x1, y1, skeleton)
@@ -536,40 +538,57 @@ function skeletor:draw()
 		local x2, y2 = polarToCartesian(bone.length, angle)
 		x2, y2 = scale(x2, y2, sx, sy)
 		x2, y2 = translate(x2, y2, x1, y1)
+
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+-- Why do we need to recalculate this angle?????
+-- IS IT FOR JOINTS???
 		angle = math.atan2(y2 - y1, x2 - x1)
-		local length = getCoordinatesDistance(x1, y1, x2, y2)
-		local x1T, x2T = orderTwoNumbers(x1, x2)
-		local y1T, y2T = orderTwoNumbers(y1, y2)
-		updateBoxBoundariesOnGrow(skeleton.boundaries, x1T, y1T, x2T, y2T)
+-- USED IN JOINT --
+---------------------------------------------------------
+
+--- USED BY SHAPE --
+		local length = getDistanceBetweenCoords(x1, y1, x2, y2)
 		local xAverage = getAverage(x1, x2)
-		local yAverage = getAverage(y1, y2)
+		local yAverage = getAverage(y1, y2)	
+-- WHAT IS THIS EXACTLY??? --
+--------------------------------------------------------------------------
+---------------------------------------------------------------------------
+
+		if skeleton.boundariesCalculate then
+			local x1T, x2T = orderTwoNumbers(x1, x2)
+			local y1T, y2T = orderTwoNumbers(y1, y2)
+			updateBoxBoundariesOnGrow(skeleton.boundaries, x1T, y1T, x2T, y2T)
+		end
 		if bone.show then
-			if parseBool(bone.wireShow, skeleton.wireShow) then
+			if getValOrDef(bone.wireShow, skeleton.wireShow) then
 				local wireStyle = bone.wireStyle or skeleton.wireStyle
 				local wireWidth = bone.wireWidth or skeleton.wireWidth
 				local wireColor = bone.wireColor or skeleton.wireColor
-				love.graphics.setLine(wireWidth, wireStyle)
+				love.graphics.setLineStyle(wireStyle)
+				love.graphics.setLineWidth(wireWidth)
 				love.graphics.setColor(wireColor)
 				love.graphics.line(x1, y1, x2, y2)
 			end
-			if parseBool(bone.jointShow, skeleton.jointShow) then
+			if getValOrDef(bone.jointShow, skeleton.jointShow) then
 				local jointMode = bone.jointMode or skeleton.jointMode
-				local jointShape = copyTable(bone.jointShape or skeleton.jointShape)
-				local jointScalable = parseBool(bone.jointScalable, skeleton.jointScalable)
-				local jointRotatable = parseBool(bone.jointRotatable, skeleton.jointRotatable)
+				local jointShape = copyTableShallow(bone.jointShape or skeleton.jointShape)
+				local jointScalable = getValOrDef(bone.jointScalable, skeleton.jointScalable)
+				local jointRotatable = getValOrDef(bone.jointRotatable, skeleton.jointRotatable)
 				local jointColor = bone.jointColor or skeleton.jointColor
 				local jointAngle, jointSx, jointSy
 				if jointRotatable then jointAngle = angle else jointAngle = 0 end
 				if jointScalable then jointSx, jointSy = sx, sy else jointSx, jointSy = 1, 1 end
 				love.graphics.setColor(jointColor)
+				-- Draw joints at both end of bone
 				transform(jointShape, jointAngle, x1, y1, jointSx, jointSy)
 				love.graphics.polygon(jointMode, jointShape)
 				transform(jointShape, 0, x2 - x1, y2 - y1, 1, 1)
 				love.graphics.polygon(jointMode, jointShape)
 			end
-			if parseBool(bone.shapeShow, skeleton.shapeShow) then
+			if getValOrDef(bone.shapeShow, skeleton.shapeShow) then
 				local shapeMode = bone.shapeMode or skeleton.shapeMode
-				local shapeShape = copyTable(bone.shapeShape or skeleton.shapeShape)
+				local shapeShape = copyTableShallow(bone.shapeShape or skeleton.shapeShape)
 				local shapeSx = bone.shapeSx or skeleton.shapeSx
 				local shapeSy = bone.shapeSy or skeleton.shapeSy
 				local shapeColor = bone.shapeColor or skeleton.shapeColor
@@ -584,28 +603,6 @@ function skeletor:draw()
 				love.graphics.setColor(shapeColor)
 				love.graphics.polygon(shapeMode, shapeShape)
 			end
-			if parseBool(bone.textureShow, skeleton.textureShow) then
-				local textureImage = bone.textureImage or skeleton.textureImage
-				local textureBlendMode = bone.textureBlendMode or skeleton.textureBlendMode
-				local textureColor = bone.textureColor or skeleton.textureColor
-				local textureColorMode = bone.textureColorMode or skeleton.textureColorMode
-				local texturePixelEffect = bone.texturePixelEffect or skeleton.texturePixelEffect
-				love.graphics.setBlendMode(textureBlendMode)
-				love.graphics.setColorMode(textureColorMode)
-				if textureColorMode ~= "replace" then love.graphics.setColor(textureColor) end
-				if texturePixelEffect then love.graphics.setPixelEffect(texturePixelEffect) end
-				love.graphics.draw(
-					textureImage,
-					xAverage,
-					yAverage,
-					angle,
-					sx,
-					sy,
-					(textureImage:getWidth() / 2),
-					(textureImage:getHeight() / 2)
-				)
-				if texturePixelEffect then love.graphics.setPixelEffect() end
-			end
 		end
 		for _,childBone in pairs(bone.childBones) do
 			drawBones(childBone, x2, y2, skeleton)
@@ -613,12 +610,12 @@ function skeletor:draw()
 	end
 	for _,skeleton in pairs(self.skeletons) do
 		if skeleton.show then
-			skeleton.boundaries = {x1 = 999999, y1 = 999999, x2 = -999999, y2 = -999999}
 			for _,childBone in pairs(skeleton.childBones) do
 				drawBones(childBone, skeleton.x, skeleton.y, skeleton)
 			end
-			if skeleton.boundariesShow then
-				love.graphics.setLine(skeleton.boundariesWidth, skeleton.boundariesStyle)
+			if skeleton.boundariesCalculate and skeleton.boundariesShow then
+				love.graphics.setLineWidth(skeleton.boundariesWidth)
+				love.graphics.setLineStyle(skeleton.boundariesStyle)
 				love.graphics.setColor(skeleton.boundariesColor)
 				love.graphics.rectangle(
 					"line",
@@ -628,6 +625,7 @@ function skeletor:draw()
 					skeleton.boundaries.y2 - skeleton.boundaries.y1
 				)
 			end
+
 		end
 	end
 end
