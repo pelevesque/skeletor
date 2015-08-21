@@ -67,7 +67,7 @@ skeletor = Skeletor({
 	skeletor:setSkeletons(skeletons) -- sets the skeletons
 ```
 
-The most useful is `skeletor:setStyle(style)`. It can be used to modify the default style at any time. For example, we can modify the `wireShow` and `shapeShow` properties after the module as been loaded.
+The most useful is `skeletor:setStyle(style)`. It can be used to modify the default style at any time. For example, we can modify the `wireShow` and `shapeShow` properties after the module has been loaded.
 
 ```lua
 -- modifying some style properties avec the module has been loaded
@@ -81,3 +81,93 @@ skeletor:setStyle({
 ``` 
 
 ## Skeleton
+
+### Creating a skeleton
+
+Creating a new skeleton is done with the `skeletor:newSkeleton(name, props)` function.
+
+The `name` is a tag we use to identify the skeleton. It is required.
+
+The `prop` is a list of properties. It is optional.
+
+Here is the list of skeleton properties and their defaults:
+
+```lua
+x = 0 -- the skeleton's x position
+y = 0 -- the skeleton's y position
+sx = 1 -- the skeleton's x scale factor
+sy = 1 -- the skeleton's y scale factor
+angle = 0 -- the skeleton's angle
+
+-- The remaining properties are the style properties mentionned above. When you create a skeleton, you can overwrite any of the default style properties previously set. 
+
+show
+boundariesCalculate
+boundariesShow
+boundariesStyle
+boundariesWidth
+boundariesColor
+wireShow
+wireStyle 
+wireWidth
+wireColor
+jointShow
+jointMode
+jointShape
+jointRotatable
+jointScalable
+jointColor
+shapeShow
+shapeMode
+shapeShape 
+shapeSx
+shapeSy
+shapeColor
+
+```
+
+Here are some examples of skeleton creation:
+
+```lua
+-- create a skeleton named John
+skeletor:newSkeleton('John');
+
+-- create a skeleton named max with a position of 200,200
+skeletor:newSkeleton('max', {
+	x = 200,
+	y = 200
+});
+
+-- create a skeleton with various properties
+skeletor:newSkeleton('max', {
+	x = 200,
+	y = 200,
+	angle = math.rad(90),
+	wireShow = true,
+	shapeColor = {23, 432, 23}
+});
+
+```
+
+### Retrieving a skeleton's property
+
+The `skeletor:getSkeletonProperty(name, propName)` function makes it possible to retrieve any given property of a skeleton.
+
+```lua
+-- retrieving the x value of a skeleton named jim
+local x = skeletor:getSkeletonProperty('jim', 'x')
+```
+
+### Editing a skeleton's properties
+
+The `skeletor:editSkeleton(name, props)` function is used to edit many properties at once.
+
+```lua
+-- editing a skeleton named sandra
+skeletor:editSkeleton('sandra', {
+	x = 123,
+	y = 34,
+	sx = 2,
+	wireColor = {123, 22, 33}
+})
+```
