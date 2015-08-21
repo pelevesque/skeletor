@@ -13,10 +13,11 @@ To load the module, use the following code.
 
 ## Default style
 
-show = true                 -- show the element (use false to hide skeletons or bones)  
+```lua
+show = true -- show the element (use false to hide skeletons or bones)  
 
 boundariesCalculate = false -- calculate the skeleton's boundary (useful for collision detection)  
-boundariesShow = false      -- show the boundary (useful for testing)  
+boundariesShow = false -- show the boundary (useful for testing)  
 boundariesStyle = "smooth" -- the style of the boundary line ("smooth", "rough")  
 boundariesWidth = 1 -- the width of the boundary line  
 boundariesColor = {255, 255, 255} -- the color of the boundary line  
@@ -39,7 +40,7 @@ shapeShape = skeletor:getEllipseVertices(0, 0, 1, .35, 0, 30) -- the shape for s
 shapeSx = 1 -- x scale factor for shapes  
 shapeSy = 1 -- y scale factor for shapes  
 shapeColor = {0, 255, 0} - the color of shapes  
-
+```
 
 
 
