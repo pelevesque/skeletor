@@ -99,7 +99,8 @@ sx = 1 -- the skeleton's x scale factor
 sy = 1 -- the skeleton's y scale factor
 angle = 0 -- the skeleton's angle
 
--- The remaining properties are the style properties mentionned above. When you create a skeleton, you can overwrite any of the default style properties previously set. 
+-- The remaining properties are the style properties mentionned above.
+-- When you create a skeleton, you can overwrite any of the default style properties previously set. 
 
 show
 boundariesCalculate
@@ -171,3 +172,33 @@ skeletor:editSkeleton('sandra', {
 	wireColor = {123, 22, 33}
 })
 ```
+
+### Deleting a skeleton
+
+`skeletor:killSkeleton(name)` is used to delete skeletons.
+
+```lua
+-- deleting a skeleton named mary
+skeletor:killSkeleton('mary')
+
+```
+
+### Cloning a skeleton
+
+`skeletor:cloneSkeleton(from, to, props)` is used to clone a skeleton.
+
+You can optionally change some of the skeleton's properties when cloning.
+
+```lua
+-- Clone joe from a skeleton named jerry
+skeletor:cloneSkeleton('jerry', 'joe')
+
+-- Clone betsy from a skeleton name monica and change some properties
+skeletor:cloneSkeleton('monica', 'betsy', {
+	x = 100,
+	angle = math.rad(23),
+	sy = 2.4,
+	wireColor = {234, 234, 12}
+})
+```
+

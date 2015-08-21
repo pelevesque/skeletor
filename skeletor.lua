@@ -488,7 +488,7 @@ end
 	@param   string   name
 	@return  void
 --]]
-function skeletor:deleteSkeleton(name)
+function skeletor:killSkeleton(name)
 	self.skeletons[name] = nil
 end
 
@@ -518,9 +518,9 @@ end
 	@return  void
 	@uses    copyDeepTable(), skeletor:editSkeleton()
 --]]
-function skeletor:cloneSkeleton(from, clone, props)
-	self.skeletons[clone] = copyDeepTable(self.skeletons[from])
-	self:editSkeleton(clone, props or {})
+function skeletor:cloneSkeleton(from, to, props)
+	self.skeletons[to] = copyDeepTable(self.skeletons[from])
+	self:editSkeleton(to, props or {})
 end
 
 --[[
