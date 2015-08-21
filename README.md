@@ -13,12 +13,10 @@ To load the module, use the following code.
 
 ## Default style
 
-This is the default style used to control the behavior and drawing of skeleton elements:
+show = true                 -- show the element (use false to hide skeletons or bones)  
 
-show = true -- show the element (use false to hide skeletons or bones)  
-
-boundariesCalculate = false // calculate the skeleton's boundary (useful for collision detection)  
-boundariesShow = false // show the boundary (useful for testing)  
+boundariesCalculate = false -- calculate the skeleton's boundary (useful for collision detection)  
+boundariesShow = false      -- show the boundary (useful for testing)  
 boundariesStyle = "smooth" -- the style of the boundary line ("smooth", "rough")  
 boundariesWidth = 1 -- the width of the boundary line  
 boundariesColor = {255, 255, 255} -- the color of the boundary line  
