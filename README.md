@@ -21,6 +21,7 @@ Skeletor is a 2d skeleton animation system for [LÖVE 2D](https://love2d.org/).
 - A texture system to decorate skeletons and bones with .jpg or .pgn images.
 - A grouping system for skeletons.
 - Saving and loading skeletons using files.
+- Separate skeletons' calculations from skeletor:draw() by creating skeletor:calculate()
 
 ## Skeletor's functions reference
 

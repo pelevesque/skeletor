@@ -123,10 +123,6 @@ function skeletor:newSkeleton(name, props)
 		boundaries = {},
 		childBones = {}
 	}
-	self.skeletons[name].boundaries.x1 = 99999
-	self.skeletons[name].boundaries.y1 = 99999
-	self.skeletons[name].boundaries.x2 = -99999
-	self.skeletons[name].boundaries.y2 = -99999
 end
 
 --[[
@@ -356,6 +352,12 @@ function skeletor:draw()
 	end
 	for _,skeleton in pairs(self.skeletons) do
 		if skeleton.show then
+			skeleton.boundaries = {
+				x1 = skeleton.x,
+				x2 = skeleton.x,
+				y1 = skeleton.y,
+				y2 = skeleton.y
+			}
 			for _,childBone in pairs(skeleton.childBones) do
 				drawBones(childBone, skeleton.x, skeleton.y, skeleton)
 			end
