@@ -9,9 +9,10 @@ Skeletor is a 2d skeleton animation system for [LÖVE 2D](https://love2d.org/).
 - A detailed cascading style system to decorate the wireframe, joints, and shapes.
 - A comprehensive tagging system to retain track of skeletons and bones.
 - A skeleton boundary system for collision detection.
-- A clean and comprehensive API.
 - A fast learning curve.
+- A clean and comprehensive API.
 - Clean source code.
+- Good documentation.
 - Unit tests for better development and testing.
 
 ## To do
@@ -20,6 +21,32 @@ Skeletor is a 2d skeleton animation system for [LÖVE 2D](https://love2d.org/).
 - A texture system to decorate skeletons and bones with .jpg or .pgn images.
 - A grouping system for skeletons.
 - Saving and loading skeletons using files.
+
+## Skeletor's functions reference
+
+```lua
+local Skeletor = require('skeletor.skeletor')
+skeletor = Skeletor(style, skeletons)
+
+skeletor:getStyle()
+skeletor:setStyle(style)
+skeletor:getSkeletons()
+skeletor:setSkeletons(skeletons)
+
+skeletor:newSkeleton(name, props)
+skeletor:getSkeletonProp(name, propKey)
+skeletor:editSkeleton(name, props)
+skeletor:cloneSkeleton(fromName, toName, props)
+skeletor:deleteSkeleton(name)
+
+skeletor:newBone(path, props)
+skeletor:getBoneProp(path, propName)
+skeletor:editBone(path, props)
+skeletor:deleteBone(path)
+
+skeletor:draw()
+
+```
 
 ## Default style
 
@@ -335,4 +362,14 @@ skeletor:editBone('paul.arm', {
 -- deleting a bone named toe on bone foot from skeleton jack
 skeletor:deleteBone('jack.foot.toe')
 
+```
+
+## Drawing skeletons and their bones
+
+To draw skeletons and their bones, you simply run `skeletor:draw()` inside Love's draw function.
+
+```lua
+function love.draw()
+	skeletor:draw()
+end
 ```
