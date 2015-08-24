@@ -106,16 +106,15 @@ skeletor:setStyle({
 
 `skeletor:getSkeletons()` and `skeletor:setStyle(style)` are there for reference. They will become useful when saving and loading skeletons from file is implemented.
 
-
 ## Skeleton
 
 ### Creating a skeleton
 
-Creating a new skeleton is done with the `skeletor:newSkeleton(name, props)` function.
+Creating a new skeleton is done via `skeletor:newSkeleton(name, props)`.
 
-The `name` is a tag we use to identify the skeleton. *(required)*
+`name` is a tag used to identify the skeleton. *(required)*
 
-The `prop` is a list of properties. *(optional)*
+`props` is a list of properties. *(optional)*
 
 Here is the list of skeleton properties and their defaults values:
 
@@ -127,7 +126,7 @@ sy = 1 -- the skeleton's y scale factor
 angle = 0 -- the skeleton's angle (in radians)
 
 -- The remaining properties are the style properties mentionned above. (@see Default style)
--- When you create a skeleton, you can overwrite any of the default style properties. 
+-- When you create a skeleton, you can overwrite any of these style properties. 
 
 show
 boundariesCalculate
@@ -158,7 +157,7 @@ Examples of skeleton creation:
 
 ```lua
 -- create a skeleton named john
-skeletor:newSkeleton('john');
+skeletor:newSkeleton('john')
 ```
 
 ```lua
@@ -166,7 +165,7 @@ skeletor:newSkeleton('john');
 skeletor:newSkeleton('max', {
 	x = 200,
 	y = 200
-});
+})
 ```
 
 ```lua
@@ -177,7 +176,7 @@ skeletor:newSkeleton('carl', {
 	angle = math.rad(90),
 	wireShow = true,
 	shapeColor = {23, 432, 23}
-});
+})
 
 ```
 
@@ -232,5 +231,108 @@ skeletor:cloneSkeleton('monica', 'betsy', {
 ```lua
 -- deleting a skeleton named mary
 skeletor:deleteSkeleton('mary')
+
+```
+
+## Bone
+
+### Creating a bone
+
+Creating a new bone is done via skeletor:newBone(path, props).
+
+`path` is a tag used to identify the bone. *(required)*
+
+`props` is a list of properties. *(optional)*
+
+Here is the list of bone properties.
+
+If they are not overwritten when creating the bone, the style properties will be derived from the skeleton they are attached to.
+
+```lua
+length = 0 -- the bone's length
+angle = 0 -- the bone's angle (in radians)
+sx = 1 -- the bone's x scale factor
+sy = 1 -- the bone's y scale factor
+
+-- The remaining properties are the style properties mentionned above. (@see Default style)
+-- Notice boundary styles are gone. This is because boundaries are reserved for the skeleton.
+-- When you create a bone, you can overwrite any of these style properties. 
+
+show
+wireShow
+wireStyle 
+wireWidth
+wireColor
+jointShow
+jointMode
+jointShape
+jointRotatable
+jointScalable
+jointColor
+shapeShow
+shapeMode
+shapeShape 
+shapeSx
+shapeSy
+shapeColor
+
+```
+
+Examples of bone creation:
+
+```lua
+-- add an arm bone on a skeleton named james
+skeletor:newSkeleton('james')
+skeletor:newBone('james.arm')
+```
+
+```lua
+-- add a hand bone on an arm bone on a skeleton named maurice
+skeletor:newSkeleton('maurice')
+skeletor:newBone('maurice.arm')
+skeletor:newBone('maurice.arm.hand')
+```
+
+```lua
+-- add a foot bone with properties on a skeleton named tim
+skeletor:newSkeleton('tim')
+skeletor:newBone('tim.foot', {
+	length = 100,
+	angle = math.rad(180),
+	wireStyle = "rough",
+	wireColor = {23, 42, 255}
+})
+```
+
+### Retrieving a bone property
+
+`skeletor:getBoneProp(path, propName)` makes it possible to retrieve any given property of a bone.
+
+```lua
+-- retrieving the angle of a bone named joe on skeleton mary
+local angle  = skeletor:getBoneProp('joe.mary', 'angle')
+```
+
+### Editing a bone's properties
+
+`skeletor:editBone(path, props)` is used to edit any number of properties at once.
+
+```lua
+-- editing a bone named arm from a skeleton named paul
+skeletor:editBone('paul.arm', {
+	length = 100,
+	sx = 2,
+	wireColor = {123, 255, 255},
+	wireWidth = 5
+})
+```
+
+### Deleting a bone
+
+`skeletor:deleteBone(path)` is used to delete bones.
+
+```lua
+-- deleting a bone named toe on bone foot from skeleton jack
+skeletor:deleteBone('jack.foot.toe')
 
 ```
