@@ -220,23 +220,40 @@ function skeletor:newBone(path, props)
 end
 
 --[[
+	Fetches a bone, with option to delete
+
+	@param   string   bone's path
+	@param   number   path index
+	@param   table    table containing bones
+	@param   bool     delete bone upon finding it
+	@return  table    bone
+--]]
+local function fetchBone(path, i, bones, delete)
+	if delete == nil then delete = false end
+	if #path == i then
+		if delete then
+			bones[path[i]] = nil
+		else
+			bone = bones[path[i]]
+		end
+	else
+		fetchBone(path, i + 1, bones[path[i]].childBones, delete)
+	end
+	return bone
+end
+
+--[[
 	Gets a property from a bone
 
 	@param   string   bone's path
 	@param   string   property's key (name)
 	@return  mixed    property's value
-	@uses    utils:splitPath()
+	@uses    fetchBone(), utils:splitPath()
 --]]
 function skeletor:getBoneProp(path, propKey)
-	local function getProp(path, i, bone, propKey)
-		if #path == i then
-			val = bone[path[i]][propKey]
-		else
-			getProp(path, i + 1, bone[path[i]].childBones, propKey)
-		end
-		return val
-	end
-	return getProp(utils:splitPath(path), 1, self.skeletons, propKey)
+	local bone = fetchBone(utils:splitPath(path), 1, self.skeletons)
+	return bone[proKey]
+
 end
 
 --[[
@@ -245,19 +262,13 @@ end
 	@param   string   path
 	@param   table    properties
 	@return  void
-	@uses    utils:splitPath()
+	@uses    fetchBone(), utils:splitPath()
 --]]
 function skeletor:editBone(path, props)
-	local function editBone(path, i, bone, props)
-		if #path == i then
-			for k,v in pairs(props) do
-				bone[path[i]][k] = v
-			end
-		else
-			editBone(path, i + 1, bone[path[i]].childBones, props)
-		end
+	local bone = fetchBone(utils:splitPath(path), 1, self.skeletons)
+	for k,v in pairs(props) do
+		bone[k] = v
 	end
-	editBone(utils:splitPath(path), 1, self.skeletons, props or {})
 end
 
 --[[
@@ -265,17 +276,10 @@ end
 
 	@param   string   path
 	@return  void
-	@uses    utils:splitPath()
+	@uses    fetchBone(), utils:splitPath()
 --]]
 function skeletor:deleteBone(path)
-	local function deleteBone(path, i, bone)
-		if #path == i then
-			bone[path[i]] = nil
-		else
-			deleteBone(path, i + 1, bone[path[i]].childBones)
-		end
-	end
-	deleteBone(utils:splitPath(path), 1, self.skeletons)
+	fetchBone(utils:splitPath(path), 1, self.skeletons, true)
 end
 
 --[[
