@@ -6,7 +6,8 @@ local Skeletor = require('skeletor.skeletor')
 skeletor = Skeletor({
 	boundariesCalculate	= true,
 	boundariesShow = true,
-	shapeShow = true
+	shapeShow = true,
+	shapeMode = "fill"
 })
 
 opts = {
@@ -51,7 +52,7 @@ function love.update(dt)
 		opts.x = opts.x + (opts.speed*dt)
 	end
 	skeletor:editSkeleton('man', {x = opts.x})
-	
+
 	-- move skeleton up and down
 	if love.keyboard.isDown('up') then
 		opts.y = opts.y - (opts.speed*dt)
