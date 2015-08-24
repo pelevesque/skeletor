@@ -34,7 +34,7 @@ skeletor:getSkeletons()
 skeletor:setSkeletons(skeletons)
 
 skeletor:newSkeleton(name, props)
-skeletor:getSkeletonProp(name, propKey)
+skeletor:getSkeletonProp(name, propName)
 skeletor:editSkeleton(name, props)
 skeletor:cloneSkeleton(fromName, toName, props)
 skeletor:deleteSkeleton(name)
@@ -373,3 +373,13 @@ function love.draw()
 	skeletor:draw()
 end
 ```
+
+## Running unit tests
+
+To run unit tests, make this call in main.lua
+
+```lua
+require 'skeletor.unittests.run'
+```
+
+If nothing happens, the unit tests have passed. If they fail, an error will be reported.
