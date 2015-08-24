@@ -4,23 +4,30 @@
 
 Skeletor is a 2d skeleton animation system for [LÖVE 2D](https://love2d.org/).
 
+## Features
+
+- A detailed cascading style system to decorate the wireframe, joints, and shapes.
+- A comprehensive tagging system to retain track of skeletons and bones.
+- A skeleton boundary system for collision detection.
+- A clean and comprehensive API.
+- A fast learning curve.
+
 ## To do
 
-- Animation alrogithm to morph from one frame to the other with a given number of frames
-- Add textures
+- An animation algorithm to morph from one frame to another in a given number of steps.
+- A texture system to decorate skeletons and bones with .jpg or .pgn images.
+- A grouping system for skeletons.
 
 ## Loading the module
 
-To load the module, use the following code.
-
 ```lua
-local Skeletor = require('skeletor')
+local Skeletor = require('skeletor.skeletor')
 skeletor = Skeletor()
 ```
 
 ## Default style
 
-Here is the default style used by the skeletor engine. It can be overwritten at various levels.
+Below is the default styles used by the skeletor engine.
 
 ```lua
 show = true -- show element (use false to hide skeletons and/or bones)  
@@ -38,14 +45,14 @@ wireColor = {255, 255, 255} -- the color of the wireframe line
 
 jointShow = true -- show joints  
 jointMode = "fill" -- the drawing mode for joints  
-jointShape = skeletor:getEllipseVertices(0, 0, 8, 8, math.rad(0), 30) -- the shape of joints  
+jointShape = utils:getEllipseVertices(0, 0, 8, 8, math.rad(0), 30) -- the shape of joints  
 jointRotatable = false -- rotate joints when skeletons or bones are scaled  
 jointScalable = true -- scale joints when skeletons or bones are scaled  
 jointColor = {255, 0, 0} -- the color of joints  
 
 shapeShow = false -- show shapes  
 shapeMode = "line" -- the drawing mode for shapes  
-shapeShape = skeletor:getEllipseVertices(0, 0, 1, .35, 0, 30) -- the shape of shapes  
+shapeShape = utils:getEllipseVertices(0, 0, 1, .35, 0, 30) -- the shape of shapes  
 shapeSx = 1 -- x scale factor for shapes  
 shapeSy = 1 -- y scale factor for shapes  
 shapeColor = {0, 255, 0} -- the color of shapes  
@@ -53,10 +60,9 @@ shapeColor = {0, 255, 0} -- the color of shapes
 
 You can overwrite any of these style properties when first loading the module.
 
-
 ```lua
 -- modifying some style properties when loading the module
-local Skeletor = require('skeletor')
+local Skeletor = require('skeletor.skeletor')
 skeletor = Skeletor({
 	wireShow = false,
 	shapeShow = true,
@@ -72,11 +78,11 @@ skeletor = Skeletor({
 	skeletor:setSkeletons(skeletons) -- sets the skeletons
 ```
 
-The most useful is `skeletor:setStyle(style)`. It can be used to modify the default style at any time. For example, we can modify the `wireShow` and `shapeShow` properties after the module has been loaded.
+The most useful is `skeletor:setStyle(style)`. It can be used to modify the default styles at any time. For example, we can modify the `wireShow` and `shapeShow` properties after the module has been loaded.
 
 ```lua
 -- modifying some style properties avec the module has been loaded
-local Skeletor = require('skeletor')
+local Skeletor = require('skeletor.skeletor')
 skeletor = Skeletor()
 
 skeletor:setStyle({
