@@ -136,8 +136,8 @@ end
 	@param   string   property's key (name)
 	@return  mixed    property's value
 --]]
-function skeletor:getSkeletonProp(name, propKey)
-	return self.skeletons[name][propKey]
+function skeletor:getSkeletonProp(name, propName)
+	return self.skeletons[name][propName]
 end
 
 --[[
@@ -162,9 +162,9 @@ end
 	@return  void
 	@uses    utils:copyDeepTable(), skeletor:editSkeleton()
 --]]
-function skeletor:cloneSkeleton(from, to, props)
-	self.skeletons[to] = utils:copyTableDeep(self.skeletons[from])
-	self:editSkeleton(to, props or {})
+function skeletor:cloneSkeleton(fromName, toName, props)
+	self.skeletons[toName] = utils:copyTableDeep(self.skeletons[fromName])
+	self:editSkeleton(toName, props or {})
 end
 
 --[[
@@ -250,9 +250,9 @@ end
 	@return  mixed    property's value
 	@uses    fetchBone(), utils:splitPath()
 --]]
-function skeletor:getBoneProp(path, propKey)
+function skeletor:getBoneProp(path, propName)
 	local bone = fetchBone(utils:splitPath(path), 1, self.skeletons)
-	return bone[proKey]
+	return bone[proName]
 
 end
 

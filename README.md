@@ -118,7 +118,7 @@ skeletor = Skeletor(nil, skeletons)
 	skeletor:setSkeletons(skeletons) -- sets the skeletons
 ```
 
-At this time, the most useful is `skeletor:setStyle(style)`. It can be used to modify the default styles at any time. For example, we can modify the `wireShow` and `shapeShow` properties after the module has been loaded.
+At this time, the most useful is `skeletor:setStyle(style)`. It can be used to modify the default styles. For example, we can modify the `wireShow` and `shapeShow` properties after the module has been loaded.
 
 ```lua
 -- modifying some style properties after the module has been loaded
@@ -232,7 +232,7 @@ skeletor:editSkeleton('sandra', {
 
 ### Cloning a skeleton
 
-`skeletor:cloneSkeleton(from, to, props)` is used to clone a skeleton.
+`skeletor:cloneSkeleton(fromName, toName, props)` is used to clone a skeleton.
 
 You can optionally change some of the skeleton's properties when cloning.
 
