@@ -35,7 +35,7 @@ local defaultStyle = {
 	boundariesShow = false,
 	boundariesStyle = "smooth",
 	boundariesWidth = 1,
-	boundariesColor = {255, 255, 255},
+	boundariesColor = {0, 0, 255},
 	wireShow = true,
 	wireStyle = "smooth",
 	wireWidth = 1,
@@ -51,7 +51,7 @@ local defaultStyle = {
 	shapeShape = utils:getEllipseVertices(0, 0, 1, .35, 0, 30),
 	shapeSx = 1,
 	shapeSy = 1,
-	shapeColor = {0, 255, 0},
+	shapeColor = {125, 255, 125},
 }
 
 --[[
