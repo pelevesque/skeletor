@@ -70,6 +70,7 @@ skeletor = Skeletor({
 	wireShow = false,
 	shapeShow = true,
 })
+```
 
 ```lua
 -- loading skeletons from a file
@@ -89,7 +90,7 @@ skeletor = Skeletor(nil, skeletons)
 	skeletor:setSkeletons(skeletons) -- sets the skeletons
 ```
 
-The most useful is `skeletor:setStyle(style)`. It can be used to modify the default styles at any time. For example, we can modify the `wireShow` and `shapeShow` properties after the module has been loaded.
+At this time, the most useful is `skeletor:setStyle(style)`. It can be used to modify the default styles at any time. For example, we can modify the `wireShow` and `shapeShow` properties after the module has been loaded.
 
 ```lua
 -- modifying some style properties after the module has been loaded
@@ -102,7 +103,7 @@ skeletor:setStyle({
 )
 ```
 
-`skeletor:getSkeletons()` and `skeletor:setStyle(style)` are there for reference. The will be useful when saving and loading skeletons from files is implemented.
+`skeletor:getSkeletons()` and `skeletor:setStyle(style)` are there for reference. They will become useful when saving and loading skeletons from files is implemented.
 
 
 ## Skeleton
@@ -111,9 +112,9 @@ skeletor:setStyle({
 
 Creating a new skeleton is done with the `skeletor:newSkeleton(name, props)` function.
 
-The `name` is a tag we use to identify the skeleton. It is required.
+The `name` is a tag we use to identify the skeleton. *(required)
 
-The `prop` is a list of properties. It is optional.
+The `prop` is a list of properties. *(optional)
 
 Here is the list of skeleton properties and their defaults:
 
@@ -122,10 +123,10 @@ x = 0 -- the skeleton's x position
 y = 0 -- the skeleton's y position
 sx = 1 -- the skeleton's x scale factor
 sy = 1 -- the skeleton's y scale factor
-angle = 0 -- the skeleton's angle
+angle = 0 -- the skeleton's angle (in radians)
 
--- The remaining properties are the style properties mentionned above.
--- When you create a skeleton, you can overwrite any of the default style properties previously set. 
+-- The remaining properties are the style properties mentionned above. (@see Default style)
+-- When you create a skeleton, you can overwrite any of the default style properties. 
 
 show
 boundariesCalculate
@@ -152,20 +153,24 @@ shapeColor
 
 ```
 
-Here are some examples of skeleton creation:
+Examples of skeleton creation:
 
 ```lua
--- create a skeleton named John
-skeletor:newSkeleton('John');
+-- create a skeleton named john
+skeletor:newSkeleton('john');
+```
 
--- create a skeleton named max with a position of 200,200
+```lua
+-- create a skeleton named max with a position of 200, 200
 skeletor:newSkeleton('max', {
 	x = 200,
 	y = 200
 });
+```
 
--- create a skeleton with various properties
-skeletor:newSkeleton('max', {
+```lua
+-- create a skeleton named carl with various properties
+skeletor:newSkeleton('carl', {
 	x = 200,
 	y = 200,
 	angle = math.rad(90),
