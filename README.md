@@ -11,23 +11,20 @@ Skeletor is a 2d skeleton animation system for [LÖVE 2D](https://love2d.org/).
 - A skeleton boundary system for collision detection.
 - A clean and comprehensive API.
 - A fast learning curve.
+- Unit tests for better development and testing.
 
 ## To do
 
 - An animation algorithm to morph from one frame to another in a given number of steps.
 - A texture system to decorate skeletons and bones with .jpg or .pgn images.
 - A grouping system for skeletons.
-
-## Loading the module
-
-```lua
-local Skeletor = require('skeletor.skeletor')
-skeletor = Skeletor()
-```
+- Saving and loading skeletons using files.
 
 ## Default style
 
-Below is the default styles used by the skeletor engine.
+Below are the default style properties used by the skeletor engine. They control the display and behavior of skeletons and their bones.
+
+These style properties can be overwritten at many different stages: when first loading the module, anytime using skeletor:setStyle(), when creating skeletons, and when creating bones.
 
 ```lua
 show = true -- show element (use false to hide skeletons and/or bones)  
@@ -58,15 +55,29 @@ shapeSy = 1 -- y scale factor for shapes
 shapeColor = {0, 255, 0} -- the color of shapes  
 ```
 
-You can overwrite any of these style properties when first loading the module.
+## Loading the module
 
 ```lua
--- modifying some style properties when loading the module
+-- simple loading
+local Skeletor = require('skeletor.skeletor')
+skeletor = Skeletor()
+```
+
+```lua
+-- modifying some style properties at load time
 local Skeletor = require('skeletor.skeletor')
 skeletor = Skeletor({
 	wireShow = false,
 	shapeShow = true,
 })
+
+```lua
+-- loading skeletons from a file
+-- NOTE: this feature is not yet implemented (reference only)
+local skeletons = -- retrieve skeletons from file
+
+local Skeletor = require('skeletor.skeletor')
+skeletor = Skeletor(nil, skeletons)
 ```
 
 ## Getters and Setters
@@ -81,7 +92,7 @@ skeletor = Skeletor({
 The most useful is `skeletor:setStyle(style)`. It can be used to modify the default styles at any time. For example, we can modify the `wireShow` and `shapeShow` properties after the module has been loaded.
 
 ```lua
--- modifying some style properties avec the module has been loaded
+-- modifying some style properties after the module has been loaded
 local Skeletor = require('skeletor.skeletor')
 skeletor = Skeletor()
 
@@ -89,7 +100,10 @@ skeletor:setStyle({
 	wireShow = false,
 	shapeShow = true
 )
-``` 
+```
+
+`skeletor:getSkeletons()` and `skeletor:setStyle(style)` are there for reference. The will be useful when saving and loading skeletons from files is implemented.
+
 
 ## Skeleton
 
