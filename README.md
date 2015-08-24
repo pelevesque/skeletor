@@ -4,6 +4,11 @@
 
 Skeletor is a 2d skeleton animation system for [LÖVE 2D](https://love2d.org/).
 
+## To do
+
+- Animation alrogithm to morph from one frame to the other with a given number of frames
+- Add textures
+
 ## Loading the module
 
 To load the module, use the following code.
@@ -201,4 +206,3 @@ skeletor:cloneSkeleton('monica', 'betsy', {
 	wireColor = {234, 234, 12}
 })
 ```
-

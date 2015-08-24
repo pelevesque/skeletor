@@ -1,0 +1,1 @@
+require 'skeletor.unittests.run'
