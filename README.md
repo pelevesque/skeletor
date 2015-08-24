@@ -11,6 +11,7 @@ Skeletor is a 2d skeleton animation system for [LÖVE 2D](https://love2d.org/).
 - A skeleton boundary system for collision detection.
 - A clean and comprehensive API.
 - A fast learning curve.
+- Clean source code.
 - Unit tests for better development and testing.
 
 ## To do
@@ -112,11 +113,11 @@ skeletor:setStyle({
 
 Creating a new skeleton is done with the `skeletor:newSkeleton(name, props)` function.
 
-The `name` is a tag we use to identify the skeleton. *(required)
+The `name` is a tag we use to identify the skeleton. *(required)*
 
-The `prop` is a list of properties. *(optional)
+The `prop` is a list of properties. *(optional)*
 
-Here is the list of skeleton properties and their defaults:
+Here is the list of skeleton properties and their defaults values:
 
 ```lua
 x = 0 -- the skeleton's x position
@@ -180,18 +181,18 @@ skeletor:newSkeleton('carl', {
 
 ```
 
-### Retrieving a skeleton's property
+### Retrieving a skeleton property
 
-The `skeletor:getSkeletonProperty(name, propName)` function makes it possible to retrieve any given property of a skeleton.
+The `skeletor:getSkeletonProp(name, propName)` function makes it possible to retrieve any given property of a skeleton.
 
 ```lua
 -- retrieving the x value of a skeleton named jim
-local x = skeletor:getSkeletonProperty('jim', 'x')
+local x = skeletor:getSkeletonProp('jim', 'x')
 ```
 
 ### Editing a skeleton's properties
 
-The `skeletor:editSkeleton(name, props)` function is used to edit many properties at once.
+The `skeletor:editSkeleton(name, props)` function is used to edit any number of properties at once.
 
 ```lua
 -- editing a skeleton named sandra
@@ -201,16 +202,6 @@ skeletor:editSkeleton('sandra', {
 	sx = 2,
 	wireColor = {123, 22, 33}
 })
-```
-
-### Deleting a skeleton
-
-`skeletor:killSkeleton(name)` is used to delete skeletons.
-
-```lua
--- deleting a skeleton named mary
-skeletor:killSkeleton('mary')
-
 ```
 
 ### Cloning a skeleton
@@ -230,4 +221,13 @@ skeletor:cloneSkeleton('monica', 'betsy', {
 	sy = 2.4,
 	wireColor = {234, 234, 12}
 })
+
+### Deleting a skeleton
+
+`skeletor:deleteSkeleton(name)` is used to delete skeletons.
+
+```lua
+-- deleting a skeleton named mary
+skeletor:deleteSkeleton('mary')
+
 ```
