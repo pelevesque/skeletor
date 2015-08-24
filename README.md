@@ -104,7 +104,7 @@ skeletor:setStyle({
 )
 ```
 
-`skeletor:getSkeletons()` and `skeletor:setStyle(style)` are there for reference. They will become useful when saving and loading skeletons from files is implemented.
+`skeletor:getSkeletons()` and `skeletor:setStyle(style)` are there for reference. They will become useful when saving and loading skeletons from file is implemented.
 
 
 ## Skeleton
@@ -183,7 +183,7 @@ skeletor:newSkeleton('carl', {
 
 ### Retrieving a skeleton property
 
-The `skeletor:getSkeletonProp(name, propName)` function makes it possible to retrieve any given property of a skeleton.
+`skeletor:getSkeletonProp(name, propName)` makes it possible to retrieve any given property of a skeleton.
 
 ```lua
 -- retrieving the x value of a skeleton named jim
@@ -192,7 +192,7 @@ local x = skeletor:getSkeletonProp('jim', 'x')
 
 ### Editing a skeleton's properties
 
-The `skeletor:editSkeleton(name, props)` function is used to edit any number of properties at once.
+`skeletor:editSkeleton(name, props)` is used to edit any number of properties at once.
 
 ```lua
 -- editing a skeleton named sandra
@@ -213,7 +213,9 @@ You can optionally change some of the skeleton's properties when cloning.
 ```lua
 -- Clone joe from a skeleton named jerry
 skeletor:cloneSkeleton('jerry', 'joe')
+```
 
+```lua
 -- Clone betsy from a skeleton name monica and change some properties
 skeletor:cloneSkeleton('monica', 'betsy', {
 	x = 100,
@@ -221,6 +223,7 @@ skeletor:cloneSkeleton('monica', 'betsy', {
 	sy = 2.4,
 	wireColor = {234, 234, 12}
 })
+```
 
 ### Deleting a skeleton
 
