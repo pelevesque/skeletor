@@ -1,7 +1,6 @@
 --[[
 Title:     utils
 Use:       utility functions used by skeletor
-Version:   1.0
 Author:    Pierre-Emmanuel Lévesque
 Email:     pierre.e.levesque@gmail.com
 Created:   August 11th, 2012

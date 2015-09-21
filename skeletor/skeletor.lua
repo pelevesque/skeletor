@@ -1,7 +1,6 @@
 --[[
 Title:     skeletor
 Use:       2D animation module for the LÖVE 2D game engine
-Version:   1.0
 Author:    Pierre-Emmanuel Lévesque
 Email:     pierre.e.levesque@gmail.com
 Created:   August 11th, 2012
