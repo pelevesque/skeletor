@@ -2,7 +2,7 @@
 
 ## About
 
-Skeletor is a 2d skeleton animation system for [LÖVE 2D](https://love2d.org/).
+Skeletor is a skeleton animation system for [LÖVE 2D](https://love2d.org/).
 
 ## Features
 
