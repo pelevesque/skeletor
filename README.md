@@ -113,10 +113,10 @@ skeletor = Skeletor(nil, skeletons)
 ## Getters and Setters
 
 ```lua
-	skeletor:getStyle() -- returns the default style being used
-	skeletor:setStyle(style) -- modifies the default style being used
-	skeletor:getSkeletons() -- returns the skeletons
-	skeletor:setSkeletons(skeletons) -- sets the skeletons
+skeletor:getStyle() -- returns the default style being used
+skeletor:setStyle(style) -- modifies the default style being used
+skeletor:getSkeletons() -- returns the skeletons
+skeletor:setSkeletons(skeletons) -- sets the skeletons
 ```
 
 At this time, the most useful is `skeletor:setStyle(style)`. It can be used to modify the default styles. For example, we can modify the `wireShow` and `shapeShow` properties after the module has been loaded.
@@ -154,7 +154,7 @@ sy = 1 -- the skeleton's y scale factor
 angle = 0 -- the skeleton's angle (in radians)
 
 -- The remaining properties are the style properties mentionned above. (@see Default style)
--- When you create a skeleton, you can overwrite any of these style properties. 
+-- When you create a skeleton, you can overwrite any of these style properties.
 
 show
 boundariesCalculate
@@ -163,7 +163,7 @@ boundariesStyle
 boundariesWidth
 boundariesColor
 wireShow
-wireStyle 
+wireStyle
 wireWidth
 wireColor
 jointShow
@@ -174,7 +174,7 @@ jointScalable
 jointColor
 shapeShow
 shapeMode
-shapeShape 
+shapeShape
 shapeSx
 shapeSy
 shapeColor
@@ -284,11 +284,11 @@ sy = 1 -- the bone's y scale factor
 
 -- The remaining properties are the style properties mentionned above. (@see Default style)
 -- Notice boundary styles are gone. This is because boundaries are reserved for the skeleton.
--- When you create a bone, you can overwrite any of these style properties. 
+-- When you create a bone, you can overwrite any of these style properties.
 
 show
 wireShow
-wireStyle 
+wireStyle
 wireWidth
 wireColor
 jointShow
@@ -299,7 +299,7 @@ jointScalable
 jointColor
 shapeShow
 shapeMode
-shapeShape 
+shapeShape
 shapeSx
 shapeSy
 shapeColor
